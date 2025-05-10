@@ -1,0 +1,78 @@
+<style >
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.container {
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+}
+
+.left-panel {
+    width: 60%;
+    background-color: #f7f5f4;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.company-name {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 36px;
+    font-weight: 700;
+    color: #FF0000;
+    text-align: center;
+}
+
+.logo {
+    position: absolute;
+    bottom: 30px;
+    height: 120px;
+    object-fit: contain;
+}
+
+.right-panel {
+    width: 40%;
+    background-color: #FF0000;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.btn {
+    position: relative;
+    background-color: transparent;
+    border: none;
+    color: white;
+    padding: 10px 0;
+    margin: 20px 0;
+    text-decoration: none;
+    font-size: 22px;
+    width: 200px;
+    text-align: center;
+    overflow: hidden;
+    transition: color 0.3s ease;
+}
+
+    .btn::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        height: 2px;
+        width: 80px;
+        background-color: white;
+        transition: width 0.4s ease;
+        transform: translateX(-50%);
+    }
+
+    .btn:hover::after {
+        width: 100%;
+    }
