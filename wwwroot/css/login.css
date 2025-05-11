@@ -1,0 +1,117 @@
+﻿body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    background-color: #FF0000;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.register-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.form-container {
+    width: 450px;
+    padding: 50px;
+    background-color: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    max-width: 95vw;
+}
+
+.app-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 42px;
+    font-weight: bold;
+    color: #FF0000;
+    margin-bottom: 30px;
+}
+
+.form-container h2 {
+    font-size: 32px;
+    margin-bottom: 15px;
+    color: #111;
+}
+
+.form-container p {
+    font-size: 18px;
+    color: #444;
+    margin-bottom: 25px;
+}
+
+.form-container input {
+    width: 100%;
+    padding: 16px;
+    margin: 12px 0;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    font-size: 18px;
+    box-sizing: border-box;
+}
+
+.signup-btn {
+    width: 100%;
+    padding: 16px;
+    background-color: #FF0000;
+    color: white;
+    font-weight: bold;
+    font-size: 20px;
+    border: none;
+    border-radius: 10px;
+    margin-top: 15px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+    .signup-btn:hover {
+        background-color: #cc0000;
+    }
+
+.alt-option {
+    margin-top: 20px;
+    font-size: 16px;
+}
+
+.password-wrapper {
+    position: relative;
+}
+
+    .password-wrapper input {
+        width: 100%;
+        padding: 16px;
+        padding-right: 45px;
+        font-size: 18px;
+        box-sizing: border-box;
+    }
+
+.eye-icon {
+    position: absolute;
+    top: 50%;
+    right: 12px;
+    transform: translateY(-50%);
+    cursor: pointer;
+    font-size: 22px;
+    color: #666;
+}
+
+.hidden-confirm {
+    opacity: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: opacity 0.5s ease, max-height 0.5s ease;
+}
+
+    .hidden-confirm.active {
+        opacity: 1;
+        max-height: 200px;
+    }
+
+.error-message {
+    color: red;
+    font-size: 15px;
+    margin-top: -5px;
+}

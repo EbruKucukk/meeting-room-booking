@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "p0isc5nnGC8r3kJYvkgSll94werE3WXMcjNEjnwhoGc=",
+  "Hash": "KMesjYtvg/L1Xw2Asf7klCMxI5whjMmvMHybgwCxvfs=",
   "Source": "bookingWEB",
   "BasePath": "_content/bookingWEB",
   "Mode": "Default",
@@ -53,6 +53,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "D:\\bookingWeb\\bookingWEB\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\bookingWEB.bundle.scp.css"
+    },
+    {
+      "Identity": "D:\\bookingWeb\\bookingWEB\\wwwroot\\css\\login.css",
+      "SourceId": "bookingWEB",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\bookingWeb\\bookingWEB\\wwwroot\\",
+      "BasePath": "_content/bookingWEB",
+      "RelativePath": "css/login.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\css\\login.css"
     },
     {
       "Identity": "D:\\bookingWeb\\bookingWEB\\wwwroot\\css\\register.css",
@@ -148,6 +167,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\images\\siber-logo2.png"
+    },
+    {
+      "Identity": "D:\\bookingWeb\\bookingWEB\\wwwroot\\js\\Login.js",
+      "SourceId": "bookingWEB",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\bookingWeb\\bookingWEB\\wwwroot\\",
+      "BasePath": "_content/bookingWEB",
+      "RelativePath": "js/Login.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\js\\Login.js"
     },
     {
       "Identity": "D:\\bookingWeb\\bookingWEB\\wwwroot\\js\\register.js",

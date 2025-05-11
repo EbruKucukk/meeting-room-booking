@@ -1,0 +1,44 @@
+﻿@page
+@model LoginModel
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Personel Girişi</title>
+    <link rel="stylesheet" href="/css/login.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="register-section">
+        <div class="form-container">
+            <h1 class="app-title">SİBER TOPLANTI ODASI</h1>
+
+            <form method="post">
+                <h2>Giriş Yap</h2>
+                <p>Personel hesabınızla giriş yapın</p>
+
+                <input type="email" name="Email" placeholder="Email" value="@Model.Email" required />
+
+                <div class="password-wrapper">
+                    <input type="password" name="Password" placeholder="Şifre" id="loginPassword" required />
+                    <span id="toggleLoginPassword" class="eye-icon">&#128065;</span>
+                </div>
+
+                @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+                {
+                    <p style="color: red; font-size: 13px; margin-top: 5px;">@Model.ErrorMessage</p>
+                }
+
+                <button type="submit" class="signup-btn">Giriş Yap</button>
+                <p class="alt-option">Hesabınız yok mu? <a href="/register">Kayıt Ol</a></p>
+            </form>
+        </div>
+    </div>
+
+    <script src="/js/login.js"></script>
+</body>
+</html>

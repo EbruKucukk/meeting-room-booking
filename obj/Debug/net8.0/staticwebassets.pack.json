@@ -5,6 +5,10 @@
       "PackagePath": "staticwebassets\\bookingWEB.bundle.scp.css"
     },
     {
+      "Id": "D:\\bookingWeb\\bookingWEB\\wwwroot\\css\\login.css",
+      "PackagePath": "staticwebassets\\css\\login.css"
+    },
+    {
       "Id": "D:\\bookingWeb\\bookingWEB\\wwwroot\\css\\register.css",
       "PackagePath": "staticwebassets\\css\\register.css"
     },
@@ -23,6 +27,10 @@
     {
       "Id": "D:\\bookingWeb\\bookingWEB\\wwwroot\\images\\siber-logo2.png",
       "PackagePath": "staticwebassets\\images\\siber-logo2.png"
+    },
+    {
+      "Id": "D:\\bookingWeb\\bookingWEB\\wwwroot\\js\\Login.js",
+      "PackagePath": "staticwebassets\\js\\Login.js"
     },
     {
       "Id": "D:\\bookingWeb\\bookingWEB\\wwwroot\\js\\register.js",

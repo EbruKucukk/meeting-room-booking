@@ -16,25 +16,35 @@
     <div class="register-section">
         <div class="form-container">
             <h1 class="app-title">SİBER TOPLANTI ODASI</h1>
+
             <form method="post">
                 <h2>Hesap Oluştur</h2>
                 <p>Hadi başlayalım!</p>
 
-                <input type="text" name="FullName" placeholder="Ad Soyad" required />
-                <input type="email" name="Email" placeholder="Email" required />
+                @* Eğer sistemde aynı e-posta varsa gösterilecek hata *@
+                @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+                {
+                    <p style="color: red; margin-bottom: 10px;">@Model.ErrorMessage</p>
+                }
+
+                <input type="text" name="FullName" placeholder="Ad Soyad" value="@Model.FullName" required />
+                <input type="email" name="Email" placeholder="Email" value="@Model.Email" required />
+
                 <div class="password-wrapper">
                     <input type="password" name="Password" placeholder="Şifre" id="password" required />
-                    <span id="togglePassword" class="eye-icon">&#128065;</span> <!-- 👁️ Unicode -->
+                    <span id="togglePassword" class="eye-icon">&#128065;</span>
                 </div>
+
                 <div id="confirmPasswordWrapper" class="hidden-confirm">
                     <div class="password-wrapper">
                         <input type="password" name="ConfirmPassword" placeholder="Şifreyi Tekrar Girin" id="confirmPassword" required />
                         <span id="toggleConfirmPassword" class="eye-icon">&#128065;</span>
                     </div>
-                    <p id="passwordError">Şifreler eşleşmiyor.</p>
+                    <p id="passwordError" class="error-message">Şifreler eşleşmiyor.</p>
                 </div>
+
                 <button type="submit" class="signup-btn">Kayıt Ol</button>
-                <p class="alt-option">Zaten hesabınız var mı? <a href="/">Giriş Yap</a></p>
+                <p class="alt-option">Zaten hesabınız var mı? <a href="/Login">Giriş Yap</a></p>
             </form>
         </div>
     </div>

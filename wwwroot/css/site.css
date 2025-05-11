@@ -1,4 +1,4 @@
-html, body {
+﻿html, body {
     margin: 0;
     padding: 0;
     height: 100%;
@@ -12,7 +12,7 @@ html, body {
 }
 
 .left-panel {
-    width: 60%;
+    width: 70%;
     background-color: #f7f5f4;
     display: flex;
     flex-direction: column;
@@ -22,7 +22,7 @@ html, body {
 }
 
 .right-panel {
-    width: 40%;
+    width: 30%;
     background-color: #FF0000;
     display: flex;
     flex-direction: column;
@@ -32,15 +32,16 @@ html, body {
 
 .company-name {
     font-family: 'Orbitron', sans-serif;
-    font-size: 36px;
+    font-size: 48px;
     font-weight: 700;
     color: #FF0000;
     text-align: center;
+    margin-bottom: 20px;
 }
 
 .logo {
-    height: 120px;
-    margin-top: 20px;
+    height: 220px; /* daha büyük logo */
+    margin-top: 100px;
 }
 
 .btn {
@@ -48,27 +49,30 @@ html, body {
     background-color: transparent;
     border: none;
     color: white;
-    padding: 10px 0;
-    margin: 20px 0;
+    padding: 20px 0;
+    margin: 30px 0;
     text-decoration: none;
-    font-size: 22px;
-    width: 200px;
+    font-size: 36px;
+    width: 340px;
     text-align: center;
     overflow: hidden;
+    transition: color 0.3s ease;
 }
 
     .btn::after {
         content: '';
         position: absolute;
-        bottom: 0;
+        bottom: 4px;
         left: 50%;
+        transform: translateX(-50%);
         height: 2px;
-        width: 80px;
+        width: 60px; /* Başlangıçta ortalanmış kısa çizgi */
         background-color: white;
         transition: width 0.4s ease;
-        transform: translateX(-50%);
     }
 
     .btn:hover::after {
-        width: 100%;
+        width: 100%; /* Çizgi butonun tamamını kaplasın */
     }
+
+
