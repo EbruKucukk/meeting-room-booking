@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "KMesjYtvg/L1Xw2Asf7klCMxI5whjMmvMHybgwCxvfs=",
+  "Hash": "hvyhsgfs4M2ecvJ/0L1r0CSJgowLsnLkZozo6lBHzss=",
   "Source": "bookingWEB",
   "BasePath": "_content/bookingWEB",
   "Mode": "Default",
@@ -53,6 +53,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "D:\\bookingWeb\\bookingWEB\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\bookingWEB.bundle.scp.css"
+    },
+    {
+      "Identity": "D:\\bookingWeb\\bookingWEB\\wwwroot\\css\\BookingDashboard.css",
+      "SourceId": "bookingWEB",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\bookingWeb\\bookingWEB\\wwwroot\\",
+      "BasePath": "_content/bookingWEB",
+      "RelativePath": "css/BookingDashboard.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\css\\BookingDashboard.css"
     },
     {
       "Identity": "D:\\bookingWeb\\bookingWEB\\wwwroot\\css\\login.css",

@@ -1,0 +1,53 @@
+﻿@page
+@model BookingDashboardModel
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="/css/BookingDashboard.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">
+                <h2>SİBER</h2>
+                <p class="subtitle">Toplantı Sistemi</p>
+            </div>
+
+            <nav class="nav-links">
+                <a href="#" class="nav-link active">Takvim</a>
+                <a href="#" class="nav-link">Odalar</a>
+                <a href="/Logout" class="nav-link">Çıkış</a>
+            </nav>
+
+            <div class="user-profile">
+                <p class="welcome">Hoş geldiniz,</p>
+                <h4>@Model.CurrentUser</h4>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="header">
+                <h1>Toplantı Takvimi</h1>
+                <div class="view-buttons">
+                    <button>Günlük</button>
+                    <button>Haftalık</button>
+                    <button>Ay</button>
+                </div>
+            </div>
+
+            <div class="calendar-placeholder">
+                <p>[Takvim Bileşeni veya toplantılar burada listelenecek]</p>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

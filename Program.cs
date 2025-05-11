@@ -5,6 +5,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Razor Pages ve DbContext servisi ekleniyor
 builder.Services.AddRazorPages();
+builder.Services.AddSession(); // Add this
+
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
     ?? throw new InvalidOperationException("Connection string not found.");
@@ -25,6 +27,8 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+app.UseSession(); // Enable session middleware
+
 app.UseAuthorization();
 
 app.MapRazorPages();

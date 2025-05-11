@@ -43,9 +43,10 @@ namespace bookingWEB.Pages
                 ErrorMessage = "Lütfen bilgilerinizi kontrol edin.";
                 return Page();
             }
+            HttpContext.Session.SetInt32("UserId", user.Id); // veya user.KullaniciId
 
             // Baþarýlý giriþ
-            return RedirectToPage("/Index");
+            return RedirectToPage("/BookingDashboard");
         }
 
         private string HashPassword(string password)
