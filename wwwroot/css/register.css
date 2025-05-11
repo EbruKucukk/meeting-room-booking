@@ -1,65 +1,113 @@
-﻿.hidden {
-    display: none;
+﻿body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    background-color: #FF0000; /* Beyaz arka plan */
+    font-family: 'Segoe UI', sans-serif;
 }
 
 .register-section {
-    position: absolute;
-    top: 0;
-    left: 0;
-    background-color: white;
-    width: 100vw;
-    height: 100vh;
-    z-index: 10;
     display: flex;
     justify-content: center;
     align-items: center;
+    height: 100%;
 }
 
 .form-container {
-    width: 350px;
+    width: 400px;
     padding: 40px;
-    background-color: #f3f4f6;
-    border-radius: 12px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    background-color: #ffffff; /* Beyaz form kutusu */
+    border-radius: 20px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
     text-align: center;
+    max-width: 90vw;
 }
 
-    .form-container h2 {
-        font-size: 24px;
-        margin-bottom: 10px;
-    }
+.app-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 28px;
+    font-weight: bold;
+    color: #FF0000; /* Kırmızı başlık */
+    margin-bottom: 20px;
+}
 
-    .form-container p {
-        font-size: 14px;
-        color: #666;
-        margin-bottom: 20px;
-    }
+.form-container h2 {
+    font-size: 22px;
+    margin-bottom: 10px;
+    color: #111;
+}
 
-    .form-container input {
-        width: 100%;
-        padding: 12px;
-        margin: 10px 0;
-        border: 1px solid #ccc;
-        border-radius: 8px;
-    }
+.form-container p {
+    font-size: 14px;
+    color: #444;
+    margin-bottom: 20px;
+}
+
+.form-container input {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-sizing: border-box;
+}
 
 .signup-btn {
     width: 100%;
     padding: 12px;
-    background-color: #4f46e5;
+    background-color: #FF0000; /* Kırmızı buton */
     color: white;
     font-weight: bold;
     border: none;
     border-radius: 8px;
     margin-top: 10px;
     cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
     .signup-btn:hover {
-        background-color: #4338ca;
+        background-color: #cc0000; /* Daha koyu kırmızı */
     }
 
 .alt-option {
     margin-top: 15px;
     font-size: 13px;
+}
+/* Başlangıçta görünmesin */
+.hidden-confirm {
+    opacity: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: all 0.5s ease-in-out;
+}
+
+.active {
+    opacity: 1 !important;
+    max-height: 200px !important;
+}
+/* Hata mesajı */
+#passwordError {
+    color: red;
+    font-size: 13px;
+    display: none;
+    margin-top: -5px;
+    margin-bottom: 10px;
+}
+.password-wrapper {
+    position: relative;
+}
+
+    .password-wrapper input {
+        padding-right: 40px; /* sağda göz için boşluk */
+    }
+
+.eye-icon {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    font-size: 18px;
+    color: #888;
+    user-select: none;
 }

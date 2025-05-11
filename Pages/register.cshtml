@@ -10,11 +10,35 @@
     <meta charset="UTF-8">
     <title>Kayıt Ol</title>
     <link rel="stylesheet" href="/css/register.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="register-container">
-        <!-- form burada olacak -->
+    <div class="register-section">
+        <div class="form-container">
+            <h1 class="app-title">SİBER TOPLANTI ODASI</h1>
+            <form method="post">
+                <h2>Hesap Oluştur</h2>
+                <p>Hadi başlayalım!</p>
+
+                <input type="text" name="FullName" placeholder="Ad Soyad" required />
+                <input type="email" name="Email" placeholder="Email" required />
+                <div class="password-wrapper">
+                    <input type="password" name="Password" placeholder="Şifre" id="password" required />
+                    <span id="togglePassword" class="eye-icon">&#128065;</span> <!-- 👁️ Unicode -->
+                </div>
+                <div id="confirmPasswordWrapper" class="hidden-confirm">
+                    <div class="password-wrapper">
+                        <input type="password" name="ConfirmPassword" placeholder="Şifreyi Tekrar Girin" id="confirmPassword" required />
+                        <span id="toggleConfirmPassword" class="eye-icon">&#128065;</span>
+                    </div>
+                    <p id="passwordError">Şifreler eşleşmiyor.</p>
+                </div>
+                <button type="submit" class="signup-btn">Kayıt Ol</button>
+                <p class="alt-option">Zaten hesabınız var mı? <a href="/">Giriş Yap</a></p>
+            </form>
+        </div>
     </div>
+
     <script src="/js/register.js"></script>
 </body>
 </html>
