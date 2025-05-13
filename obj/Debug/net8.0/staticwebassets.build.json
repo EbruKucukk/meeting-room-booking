@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "hvyhsgfs4M2ecvJ/0L1r0CSJgowLsnLkZozo6lBHzss=",
+  "Hash": "TmLO3vo7JMNDyWpWY4tIDYWMTK8yFIk+iFSScjfLTPs=",
   "Source": "bookingWEB",
   "BasePath": "_content/bookingWEB",
   "Mode": "Default",
@@ -55,12 +55,12 @@
       "OriginalItemSpec": "D:\\bookingWeb\\bookingWEB\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\bookingWEB.bundle.scp.css"
     },
     {
-      "Identity": "D:\\bookingWeb\\bookingWEB\\wwwroot\\css\\BookingDashboard.css",
+      "Identity": "D:\\bookingWeb\\bookingWEB\\wwwroot\\css\\bookingDashboard.css",
       "SourceId": "bookingWEB",
       "SourceType": "Discovered",
       "ContentRoot": "D:\\bookingWeb\\bookingWEB\\wwwroot\\",
       "BasePath": "_content/bookingWEB",
-      "RelativePath": "css/BookingDashboard.css",
+      "RelativePath": "css/bookingDashboard.css",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
@@ -71,7 +71,7 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\css\\BookingDashboard.css"
+      "OriginalItemSpec": "wwwroot\\css\\bookingDashboard.css"
     },
     {
       "Identity": "D:\\bookingWeb\\bookingWEB\\wwwroot\\css\\login.css",
@@ -188,12 +188,12 @@
       "OriginalItemSpec": "wwwroot\\images\\siber-logo2.png"
     },
     {
-      "Identity": "D:\\bookingWeb\\bookingWEB\\wwwroot\\js\\Login.js",
+      "Identity": "D:\\bookingWeb\\bookingWEB\\wwwroot\\js\\calendar.js",
       "SourceId": "bookingWEB",
       "SourceType": "Discovered",
       "ContentRoot": "D:\\bookingWeb\\bookingWEB\\wwwroot\\",
       "BasePath": "_content/bookingWEB",
-      "RelativePath": "js/Login.js",
+      "RelativePath": "js/calendar.js",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
@@ -204,7 +204,26 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\js\\Login.js"
+      "OriginalItemSpec": "wwwroot\\js\\calendar.js"
+    },
+    {
+      "Identity": "D:\\bookingWeb\\bookingWEB\\wwwroot\\js\\login.js",
+      "SourceId": "bookingWEB",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\bookingWeb\\bookingWEB\\wwwroot\\",
+      "BasePath": "_content/bookingWEB",
+      "RelativePath": "js/login.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\js\\login.js"
     },
     {
       "Identity": "D:\\bookingWeb\\bookingWEB\\wwwroot\\js\\register.js",

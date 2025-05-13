@@ -11,6 +11,8 @@
     <title>Dashboard</title>
     <link rel="stylesheet" href="/css/BookingDashboard.css" />
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/locales/tr.global.min.js"></script>
 </head>
 <body>
     <div class="dashboard-container">
@@ -35,19 +37,16 @@
 
         <!-- Main Content -->
         <main class="main-content">
-            <div class="header">
-                <h1>Toplantı Takvimi</h1>
-                <div class="view-buttons">
-                    <button>Günlük</button>
-                    <button>Haftalık</button>
-                    <button>Ay</button>
-                </div>
+            <div class="calendar-header">
+                <h1 id="currentMonthLabel">Takvim</h1>
             </div>
 
-            <div class="calendar-placeholder">
-                <p>[Takvim Bileşeni veya toplantılar burada listelenecek]</p>
+            <div class="calendar-placeholder" id="calendarView">
+                <!-- JS ile FullCalendar buraya yerleşecek -->
             </div>
         </main>
     </div>
+
+    <script src="/js/calendar.js"></script>
 </body>
 </html>
