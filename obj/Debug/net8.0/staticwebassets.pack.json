@@ -33,12 +33,20 @@
       "PackagePath": "staticwebassets\\images\\siber-logo2.png"
     },
     {
+      "Id": "D:\\bookingWeb\\bookingWEB\\wwwroot\\js\\api.js",
+      "PackagePath": "staticwebassets\\js\\api.js"
+    },
+    {
       "Id": "D:\\bookingWeb\\bookingWEB\\wwwroot\\js\\calendar.js",
       "PackagePath": "staticwebassets\\js\\calendar.js"
     },
     {
       "Id": "D:\\bookingWeb\\bookingWEB\\wwwroot\\js\\login.js",
       "PackagePath": "staticwebassets\\js\\login.js"
+    },
+    {
+      "Id": "D:\\bookingWeb\\bookingWEB\\wwwroot\\js\\modal.js",
+      "PackagePath": "staticwebassets\\js\\modal.js"
     },
     {
       "Id": "D:\\bookingWeb\\bookingWEB\\wwwroot\\js\\register.js",

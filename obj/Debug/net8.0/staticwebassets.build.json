@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "TmLO3vo7JMNDyWpWY4tIDYWMTK8yFIk+iFSScjfLTPs=",
+  "Hash": "gI+sFlEFW6lORhHXBKQuO6gvhT9cvtN4b8drjuN9XoY=",
   "Source": "bookingWEB",
   "BasePath": "_content/bookingWEB",
   "Mode": "Default",
@@ -188,6 +188,25 @@
       "OriginalItemSpec": "wwwroot\\images\\siber-logo2.png"
     },
     {
+      "Identity": "D:\\bookingWeb\\bookingWEB\\wwwroot\\js\\api.js",
+      "SourceId": "bookingWEB",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\bookingWeb\\bookingWEB\\wwwroot\\",
+      "BasePath": "_content/bookingWEB",
+      "RelativePath": "js/api.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\js\\api.js"
+    },
+    {
       "Identity": "D:\\bookingWeb\\bookingWEB\\wwwroot\\js\\calendar.js",
       "SourceId": "bookingWEB",
       "SourceType": "Discovered",
@@ -224,6 +243,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\js\\login.js"
+    },
+    {
+      "Identity": "D:\\bookingWeb\\bookingWEB\\wwwroot\\js\\modal.js",
+      "SourceId": "bookingWEB",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\bookingWeb\\bookingWEB\\wwwroot\\",
+      "BasePath": "_content/bookingWEB",
+      "RelativePath": "js/modal.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\js\\modal.js"
     },
     {
       "Identity": "D:\\bookingWeb\\bookingWEB\\wwwroot\\js\\register.js",

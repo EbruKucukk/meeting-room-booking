@@ -17,10 +17,10 @@ public class BookingDashboardModel : PageModel
         var userId = HttpContext.Session.GetInt32("UserId");
         if (userId != null)
         {
-            var user = _context.Users.FirstOrDefault(u => u.Id == userId);
+            var user = _context.Kullanici.FirstOrDefault(u => u.KullaniciId == userId);
             if (user != null)
             {
-                CurrentUser = user.FullName;
+                CurrentUser = user.AdSoyad;
             }
         }
     }

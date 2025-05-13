@@ -1,4 +1,5 @@
-﻿using bookingWEB.Data;
+﻿using bookingWEB.Models;
+using bookingWEB.Data;
 using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
@@ -27,10 +28,10 @@ public class MeetingsController : ControllerBase
         return Ok(meeting);
     }
 
-    [HttpDelete("{id}")]
-    public IActionResult DeleteMeeting(int id)
+    [HttpDelete("{meetingID}")]
+    public IActionResult DeleteMeeting(int meetingID)
     {
-        var meeting = _context.Meetings.Find(id);
+        var meeting = _context.Meetings.Find(meetingID);
         if (meeting == null)
             return NotFound();
 

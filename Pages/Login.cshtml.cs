@@ -35,15 +35,15 @@ namespace bookingWEB.Pages
 
             var hashedPassword = HashPassword(Password);
 
-            var user = _context.Users.FirstOrDefault(u =>
-                u.Email == Email && u.PasswordHash == hashedPassword);
+            var user = _context.Kullanici.FirstOrDefault(u =>
+                u.Email == Email && u.SifreHash == hashedPassword);
 
             if (user == null)
             {
                 ErrorMessage = "Lütfen bilgilerinizi kontrol edin.";
                 return Page();
             }
-            HttpContext.Session.SetInt32("UserId", user.Id); // veya user.KullaniciId
+            HttpContext.Session.SetInt32("UserId", user.KullaniciId); // veya user.KullaniciId
 
             // Baþarýlý giriþ
             return RedirectToPage("/BookingDashboard");

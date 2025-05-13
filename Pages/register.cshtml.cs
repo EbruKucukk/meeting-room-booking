@@ -34,7 +34,7 @@ namespace bookingWEB.Pages
                 return Page();
 
             // E-posta daha önce kayýt edilmiþ mi?
-            var existingUser = _context.Users.FirstOrDefault(u => u.Email == Email);
+            var existingUser = _context.Kullanici.FirstOrDefault(u => u.Email == Email);
             if (existingUser != null)
             {
                 ErrorMessage = "Bu e-posta adresiyle zaten bir hesap oluþturulmuþ.";
@@ -43,15 +43,15 @@ namespace bookingWEB.Pages
 
             string passwordHash = HashPassword(Password);
 
-            var newUser = new User
+            var newUser = new Kullanici
             {
-                FullName = FullName,
+                AdSoyad = FullName,
                 Email = Email,
-                PasswordHash = passwordHash,
-                CreatedAt = DateTime.Now
+                SifreHash = passwordHash,
+                KayitTarihi = DateTime.Now
             };
 
-            _context.Users.Add(newUser);
+            _context.Kullanici.Add(newUser);
             _context.SaveChanges();
 
             return RedirectToPage("/Login");

@@ -1,12 +1,12 @@
-using bookingWEB.Data;
+﻿using bookingWEB.Data;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Razor Pages ve DbContext servisi ekleniyor
 builder.Services.AddRazorPages();
-builder.Services.AddSession(); // Add this
-
+builder.Services.AddControllers(); // <-- ✅ API için gerekli
+builder.Services.AddSession();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
     ?? throw new InvalidOperationException("Connection string not found.");
@@ -16,7 +16,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 var app = builder.Build();
 
-// Hata ay�klama ve HSTS
+// Hata ayıklama ve HSTS
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error");
@@ -27,9 +27,11 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-app.UseSession(); // Enable session middleware
+app.UseSession();
 
 app.UseAuthorization();
 
 app.MapRazorPages();
+app.MapControllers(); // <-- ✅ API endpoint'lerini aktif hale getirir
+
 app.Run();
