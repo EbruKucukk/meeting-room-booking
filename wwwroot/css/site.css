@@ -3,6 +3,9 @@
     padding: 0;
     height: 100%;
     font-family: 'Segoe UI', sans-serif;
+    overflow: hidden; /* scroll bar modala değil sayfaya açılmasın diye */
+    width: 100%;
+    overflow-x: hidden; /* Sağa scroll bar'ı tamamen engeller */
 }
 
 .container {
@@ -74,5 +77,21 @@
     .btn:hover::after {
         width: 100%; /* Çizgi butonun tamamını kaplasın */
     }
-
-
+.custom-tooltip {
+    position: absolute;
+    background: #ffffff;
+    border: 1px solid #dcdcdc;
+    border-radius: 16px;
+    padding: 16px 20px;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.1);
+    color: #2e2e2e;
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 14px;
+    max-width: 340px;
+    line-height: 1.6;
+    z-index: 9999;
+    pointer-events: none;
+    opacity: 0;
+    transform: translateY(5px);
+    transition: opacity 0.25s ease, transform 0.25s ease;
+}

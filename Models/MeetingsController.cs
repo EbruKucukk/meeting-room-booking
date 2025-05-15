@@ -39,4 +39,23 @@ public class MeetingsController : ControllerBase
         _context.SaveChanges();
         return Ok();
     }
+
+    // ✅ BU METOD BURADA OLMALIYDI
+    [HttpPut("{id}")]
+    public IActionResult UpdateMeeting(int id, [FromBody] Meeting updated)
+    {
+        var meeting = _context.Meetings.Find(id);
+        if (meeting == null)
+            return NotFound();
+
+        meeting.Title = updated.Title;
+        meeting.RoomName = updated.RoomName;
+        meeting.StartTime = updated.StartTime;
+        meeting.EndTime = updated.EndTime;
+        meeting.Description = updated.Description;
+        meeting.Organizer = updated.Organizer;
+
+        _context.SaveChanges();
+        return Ok(meeting);
+    }
 }

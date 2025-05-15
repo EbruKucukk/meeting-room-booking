@@ -1,84 +1,59 @@
 ﻿function openCreateModal(info, jsEvent) {
-    // Önce tüm eski modalları kaldır
     document.querySelectorAll('.modal-floating').forEach(m => m.remove());
 
-    const startStr = info.dateStr + "T08:00";
     const modal = document.createElement('div');
     modal.className = 'modal-floating';
-    modal.style.position = 'absolute';
-    modal.style.top = '0px';
-    modal.style.left = '0px';
-    modal.style.visibility = 'hidden'; // ölçüm için önce gizli
+    Object.assign(modal.style, {
+        position: 'fixed', width: '500px', maxWidth: '95vw', maxHeight: '90vh',
+        overflowY: 'auto', background: 'white', borderRadius: '12px',
+        boxShadow: '0 0 30px rgba(0,0,0,0.2)', padding: '24px', zIndex: 9999,
+        opacity: '0', transform: 'translateY(-20px)', transition: 'all 0.3s ease'
+    });
 
-    // Modal içeriğini ata
     modal.innerHTML = `
         <div class="modal-content">
             <h2>Yeni Toplantı</h2>
             <form id="createForm">
                 <label>Konu:</label>
-                <input name="title" required />
-                
+                <input name="title" required style="width:100%;" />
+
                 <label>Oda Adı:</label>
-                <input name="roomName" required />
-                
-                <label>Başlangıç Zamanı:</label>
-                <input type="datetime-local" name="startTime" value="${startStr}" required />
-                
+                <input name="roomName" required style="width:100%;" />
+
+                <input type="hidden" name="selectedDate" value="${info.dateStr}" />
+                <label>Saat:</label>
+                <input type="time" name="selectedTime" required style="width:100%;" />
+
                 <label>Organizatör:</label>
-                <select id="organizerSelect" name="organizer" required>
+                <select id="organizerSelect" name="organizer" required style="width:100%;">
                     <option value="">Seçiniz</option>
                 </select>
-                
+
                 <label>Açıklama:</label>
                 <textarea name="description" rows="4" style="width:100%; padding:8px; border-radius:6px;">Opsiyonel</textarea>
-                
-                <div class="modal-actions">
-                    <button type="submit">Kaydet</button>
-                    <button type="button" onclick="this.closest('.modal-floating').remove()">İptal</button>
+
+                <div class="modal-actions" style="margin-top: 16px; text-align: right;">
+                    <button type="submit" style="padding: 10px 16px; background: red; color: white; border: none; border-radius: 6px;">Kaydet</button>
+                    <button type="button" onclick="this.closest('.modal-floating').remove()" style="padding: 10px 16px; background: #ccc; border: none; border-radius: 6px;">İptal</button>
                 </div>
             </form>
         </div>
     `;
 
-    document.body.appendChild(modal); // içeriği atanmış haliyle DOM’a ekle
-
-    // Artık güvenle textarea’ya erişebilirsin
-    const textarea = modal.querySelector('textarea[name="description"]');
-    textarea.addEventListener('focus', function () {
-        if (this.value === 'Opsiyonel') this.value = '';
-    });
-
-    // Form submit
-    modal.querySelector('#createForm').addEventListener('submit', async function (e) {
-        e.preventDefault();
-        const formData = Object.fromEntries(new FormData(this).entries());
-
-        await createMeetingInApi(formData);
-        modal.remove();
-        window.bookingCalendar.refetchEvents();
-    });
-
-    // Kullanıcıları getir
+    document.body.appendChild(modal);
     loadOrganizers();
 
-    // Konumlama
     requestAnimationFrame(() => {
-        const modalRect = modal.getBoundingClientRect();
-        const modalWidth = modalRect.width;
-        const modalHeight = modalRect.height;
-
-        let top = jsEvent.pageY;
-        let left = jsEvent.pageX;
-
-        if (top + modalHeight > window.innerHeight) top = window.innerHeight - modalHeight - 20;
-        if (left + modalWidth > window.innerWidth) left = window.innerWidth - modalWidth - 20;
-
-        modal.style.top = `${Math.max(top, 20)}px`;
-        modal.style.left = `${Math.max(left, 20)}px`;
-        modal.style.visibility = 'visible';
+        const { width, height } = modal.getBoundingClientRect();
+        let left = jsEvent.clientX, top = jsEvent.clientY, margin = 20;
+        if (left + width + margin > window.innerWidth) left = window.innerWidth - width - margin;
+        if (top + height + margin > window.innerHeight) top = window.innerHeight - height - margin;
+        modal.style.left = `${Math.max(margin, left)}px`;
+        modal.style.top = `${Math.max(margin, top)}px`;
+        modal.style.opacity = '1';
+        modal.style.transform = 'translateY(0)';
     });
 
-    // Dış tıklama ile kapatma
     setTimeout(() => {
         document.addEventListener('click', function close(e) {
             if (!modal.contains(e.target)) {
@@ -87,12 +62,48 @@
             }
         }, { once: true });
     });
+
+    document.addEventListener('keydown', function escClose(e) {
+        if (e.key === "Escape") {
+            modal.remove();
+            document.removeEventListener('keydown', escClose);
+        }
+    });
+    modal.querySelector('#createForm').addEventListener('submit', async function (e) {
+        e.preventDefault();
+        const data = Object.fromEntries(new FormData(this).entries());
+
+        const start = `${data.selectedDate}T${data.selectedTime}`;
+        const end = `${data.selectedDate}T${data.endTime}`;
+
+        if (start >= end) {
+            alert("Bitiş saati başlangıç saatinden sonra olmalıdır.");
+            return;
+        }
+
+        const meetingData = {
+            title: data.title,
+            roomName: data.roomName,
+            startTime: start,
+            endTime: end,
+            organizer: data.organizer,
+            description: data.description
+        };
+
+        await createMeetingInApi(meetingData);
+        modal.remove();
+        window.bookingCalendar.refetchEvents();
+    });
+    const textarea = modal.querySelector('textarea[name="description"]');
+    textarea.addEventListener('focus', function () {
+        if (this.value === 'Opsiyonel') this.value = '';
+    });
 }
+
 async function loadOrganizers() {
     try {
         const res = await fetch('/api/users');
         const users = await res.json();
-
         const select = document.getElementById('organizerSelect');
         users.forEach(user => {
             const option = document.createElement('option');
@@ -103,23 +114,4 @@ async function loadOrganizers() {
     } catch (err) {
         console.error("Kullanıcılar yüklenemedi:", err);
     }
-}
-
-function showEventModal(info) {
-    const { title, extendedProps, start, end } = info.event;
-
-    const modal = document.createElement('div');
-    modal.className = 'modal-overlay';
-    modal.innerHTML = `
-        <div class="modal-content">
-            <h2>${title}</h2>
-            <p><strong>Organizatör:</strong> ${extendedProps.organizer}</p>
-            <p><strong>Başlangıç:</strong> ${start.toLocaleString('tr-TR')}</p>
-            <p><strong>Bitiş:</strong> ${end.toLocaleString('tr-TR')}</p>
-            <div class="modal-actions" style="margin-top: 16px;">
-                <button onclick="this.closest('.modal-overlay').remove()" style="padding: 10px 18px; background-color: #aaa; border: none; border-radius: 6px;">Kapat</button>
-            </div>
-        </div>
-    `;
-    document.body.appendChild(modal);
 }
