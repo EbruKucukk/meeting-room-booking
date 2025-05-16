@@ -23,20 +23,14 @@
             day: 'Günlük'
         },
 
-        // 📅 Toplantı verilerini yükle
         events: fetchMeetingsFromApi,
-
-        // 🟢 Boş bir güne tıklanırsa toplantı oluşturma modalı aç
         dateClick: function (info) {
-            openCreateModal(info, info.jsEvent);
+            openCreateModal(info, info.jsEvent); // ✅ modal.js'teki fonksiyonu çağırıyor
         },
-
-        // 🔵 Etkinliğe tek tıklanınca bilgi modalı aç
         eventClick: function (info) {
             showEventModal(info);
         },
 
-        // 🟣 Etkinlik eklendikten sonra tooltip ve çift tıklama tanımlamaları yapılır
         eventDidMount: function (info) {
             const event = info.event;
             const el = info.el;
@@ -45,18 +39,16 @@
             el.addEventListener("mouseenter", (e) => {
                 tooltip = document.createElement("div");
                 tooltip.className = "modern-tooltip";
-
                 tooltip.innerHTML = `
-            <div class="tooltip-card">
-                <div class="tooltip-title">${event.title || 'Etkinlik'}</div>
-                <div class="tooltip-row"><b>Başlangıç:</b> ${event.start?.toLocaleString('tr-TR') || '-'}</div>
-                <div class="tooltip-row"><b>Bitiş:</b> ${event.end?.toLocaleString('tr-TR') || '-'}</div>
-                <div class="tooltip-row"><b>Düzenleyen:</b> ${event.extendedProps?.organizer || '-'}</div>
-                <div class="tooltip-row"><b>Konum:</b> ${event.extendedProps?.roomName || '-'}</div>
-                <div class="tooltip-row"><b>Açıklama:</b> ${event.extendedProps?.description || '-'}</div>
-            </div>
-        `;
-
+                    <div class="tooltip-card">
+                        <div class="tooltip-title">${event.title || 'Etkinlik'}</div>
+                        <div class="tooltip-row"><b>Başlangıç:</b> ${event.start?.toLocaleString('tr-TR') || '-'}</div>
+                        <div class="tooltip-row"><b>Bitiş:</b> ${event.end?.toLocaleString('tr-TR') || '-'}</div>
+                        <div class="tooltip-row"><b>Düzenleyen:</b> ${event.extendedProps?.organizer || '-'}</div>
+                        <div class="tooltip-row"><b>Konum:</b> ${event.extendedProps?.roomName || '-'}</div>
+                        <div class="tooltip-row"><b>Açıklama:</b> ${event.extendedProps?.description || '-'}</div>
+                    </div>
+                `;
                 document.body.appendChild(tooltip);
 
                 tooltip.style.position = "absolute";
@@ -83,15 +75,15 @@
                     tooltip = null;
                 }
             });
+
             el.addEventListener("dblclick", (e) => {
                 e.preventDefault();
-                openEditModal(event); // ✅ BU SATIR ÇALIŞACAK
+                openEditModal(event);
             });
+
         }
-    });
+    }); // ← 🔴 eksik olan kapatma burasıydı
 
     calendar.render();
-
-    // Global erişim için takvimi dışa aktar
     window.bookingCalendar = calendar;
 });

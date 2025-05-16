@@ -95,3 +95,8 @@
     transform: translateY(5px);
     transition: opacity 0.25s ease, transform 0.25s ease;
 }
+.modern-tooltip {
+    pointer-events: none; /* Tooltip tıklamayı engellemesin */
+    position: absolute;
+    z-index: 9999;
+}

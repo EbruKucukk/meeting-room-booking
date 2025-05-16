@@ -1,7 +1,10 @@
-using bookingWEB.Data;
-using bookingWEB.Models;
+﻿using bookingWEB.Data;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -28,25 +31,37 @@ namespace bookingWEB.Pages
         {
         }
 
-        public IActionResult OnPost()
+        public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
             if (!ModelState.IsValid)
                 return Page();
 
             var hashedPassword = HashPassword(Password);
 
-            var user = _context.Kullanici.FirstOrDefault(u =>
-                u.Email == Email && u.SifreHash == hashedPassword);
+            var user = await _context.Kullanici
+                .FirstOrDefaultAsync(u => u.Email == Email && u.SifreHash == hashedPassword);
 
             if (user == null)
             {
-                ErrorMessage = "L�tfen bilgilerinizi kontrol edin.";
+                ErrorMessage = "Lütfen bilgilerinizi kontrol edin.";
                 return Page();
             }
-            HttpContext.Session.SetInt32("UserId", user.KullaniciId); // veya user.KullaniciId
 
-            // Ba�ar�l� giri�
-            return RedirectToPage("/BookingDashboard");
+            // ✅ Kullanıcı kimliği oluşturuluyor
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Name, user.AdSoyad),
+                new Claim(ClaimTypes.Email, user.Email)
+            };
+
+            var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            var principal = new ClaimsPrincipal(identity);
+
+            // ✅ Kimlik cookie olarak yazılıyor
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+
+            // 🧭 Giriş başarılı, yönlendir
+            return Redirect(returnUrl ?? "/BookingDashboard");
         }
 
         private string HashPassword(string password)

@@ -129,15 +129,20 @@ html, body {
 
 /* EVENT GÖRÜNÜMÜ */
 .fc-event {
-    background-color: #f8d7da; /* açık kırmızı */
-    color: #721c24; /* koyu bordo yazı */
-    border: 1px solid #f5c6cb;
-    padding: 4px 6px;
-    border-radius: 4px;
+    background-color: #FF0000 !important; /* Sidebar kırmızı */
+    color: white !important;
+    border: none;
+    padding: 6px 8px;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 14px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
     white-space: normal;
-    font-size: 13px;
-    line-height: 1.4;
 }
+    .fc-event:hover {
+        background-color: #cc0000 !important;
+        cursor: pointer;
+    }
 
 .modal-overlay {
     position: fixed;
@@ -297,4 +302,9 @@ html, body {
 
 .tooltip-row {
     margin-bottom: 4px;
+}
+.modern-tooltip {
+    pointer-events: none; /* Tooltip tıklamayı engellemesin */
+    position: absolute;
+    z-index: 9999;
 }

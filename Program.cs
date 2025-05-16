@@ -1,37 +1,55 @@
 ﻿using bookingWEB.Data;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Razor Pages ve DbContext servisi ekleniyor
+// 🔹 Razor Pages aktif
 builder.Services.AddRazorPages();
-builder.Services.AddControllers(); // <-- ✅ API için gerekli
-builder.Services.AddSession();
 
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
-    ?? throw new InvalidOperationException("Connection string not found.");
+// 🔹 Authentication + Authorization (Cookie ile)
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Login"; // Giriş yapılmamışsa buraya yönlendir
+        options.AccessDeniedPath = "/AccessDenied"; // Yetki yoksa buraya yönlendir
+        options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+    });
 
+builder.Services.AddAuthorization();
+
+// 🔹 Veritabanı bağlantısı (senin yapına göre)
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(connectionString));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+// 🔹 Session middleware (eğer session kullanıyorsan)
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
 
 var app = builder.Build();
 
-// Hata ayıklama ve HSTS
+// Hata yönetimi
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error");
     app.UseHsts();
 }
 
+// Middleware sıralaması
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
-app.UseSession();
 
-app.UseAuthorization();
+app.UseAuthentication();  // ⬅️ Giriş kontrolü burada başlar
+app.UseAuthorization();   // ⬅️ Yetki kontrolü burada işlenir
+
+app.UseSession();         // (opsiyonel: eğer session kullanıyorsan)
 
 app.MapRazorPages();
-app.MapControllers(); // <-- ✅ API endpoint'lerini aktif hale getirir
+app.MapControllers();     // API endpoint'leri için (örn: /api/meetings)
 
 app.Run();

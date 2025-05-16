@@ -1,30 +1,28 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace bookingWEB.Models
+public class Meeting
 {
-    [Table("Meetings")]
-    public class Meeting
-    {
-        [Key]
-        public int meetingID { get; set; }
+    [Key]
+    public int MeetingID { get; set; } // 🔁 meetingID -> MeetingID ile eşlendi
 
-        [Required]
-        public string Title { get; set; }
+    [Required]
+    [StringLength(150)]
+    public string Title { get; set; }
 
-        [Required]
-        public string RoomName { get; set; }
+    [Required]
+    [StringLength(100)]
+    public string RoomName { get; set; }
 
-        [Required]
-        public DateTime StartTime { get; set; }
+    [Required]
+    public DateTime StartTime { get; set; }
 
-        [Required]
-        public DateTime EndTime { get; set; }
+    [Required]
+    public DateTime EndTime { get; set; }
 
-        [Required]
-        public string Organizer { get; set; }
+    [Required]
+    [StringLength(150)]
+    public string Organizer { get; set; }
 
-        public string? Description { get; set; }
-    }
+    [StringLength(int.MaxValue)] // nvarchar(max) uyumu
+    public string Description { get; set; }
 }
