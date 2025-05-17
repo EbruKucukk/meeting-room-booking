@@ -1,14 +1,24 @@
 ﻿// 📅 Tüm toplantıları API'den al
 async function fetchMeetingsFromApi(fetchInfo, successCallback, failureCallback) {
     try {
-        const response = await fetch('/api/meetings');
-        const meetings = await response.json();
+        const res = await fetch('/api/meetings', {
+            method: 'GET',
+            credentials: 'include' // 🔐 Oturum bilgisini gönder
+        });
 
-        const events = meetings.map(m => ({
+        const data = await res.json();
+
+        if (!Array.isArray(data)) {
+            console.error("API'den gelen veri dizi değil:", data);
+            failureCallback("Veri dizi değil");
+            return;
+        }
+
+        const events = data.map(m => ({
             id: m.id,
             title: `${m.title} - ${m.roomName}`,
-            start: new Date(m.startTime).toISOString(),
-            end: m.endTime ? new Date(m.endTime).toISOString() : null,
+            start: m.startTime,
+            end: m.endTime,
             extendedProps: {
                 organizer: m.organizer,
                 roomName: m.roomName,
@@ -17,9 +27,9 @@ async function fetchMeetingsFromApi(fetchInfo, successCallback, failureCallback)
         }));
 
         successCallback(events);
-    } catch (error) {
-        console.error("❌ Toplantılar API'den alınamadı:", error);
-        failureCallback(error);
+    } catch (err) {
+        console.error("Toplantılar API'den alınamadı:", err);
+        failureCallback(err);
     }
 }
 
@@ -29,6 +39,7 @@ async function createMeetingInApi(meetingData) {
         const response = await fetch('/api/meetings', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
+            credentials: 'include', // 🔐 Cookie ile gönder
             body: JSON.stringify(meetingData)
         });
 
@@ -48,6 +59,7 @@ async function updateMeetingInApi(id, updatedData) {
         const response = await fetch(`/api/meetings/${id}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
+            credentials: 'include', // 🔐 Cookie ile gönder
             body: JSON.stringify(updatedData)
         });
 
@@ -65,7 +77,8 @@ async function updateMeetingInApi(id, updatedData) {
 async function deleteMeetingFromApi(id) {
     try {
         const response = await fetch(`/api/meetings/${id}`, {
-            method: 'DELETE'
+            method: 'DELETE',
+            credentials: 'include' // 🔐 Cookie ile gönder
         });
 
         if (!response.ok) {

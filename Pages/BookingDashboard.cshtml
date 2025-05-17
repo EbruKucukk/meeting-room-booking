@@ -45,10 +45,22 @@
             <div class="calendar-placeholder" id="calendarView">
                 <!-- JS ile FullCalendar buraya yerleşecek -->
             </div>
+
+            <!-- Razor Partial: Autocomplete Katılımcılar Alanı -->
+            <div id="autocompleteContainer">
+                @await Html.PartialAsync("_AutocompleteInput")
+            </div>
         </main>
     </div>
+
     <script src="/js/api.js"></script>
+    @await Html.PartialAsync("_AutocompleteInput") <!-- 👈 Bunu ekle -->
     <script src="/js/modal.js"></script>
     <script src="/js/calendar.js"></script>
+
+    <script>
+        window.loggedInUser = "@Model.CurrentUser"; // Veya @User.Identity.Name
+    </script>
+
 </body>
 </html>

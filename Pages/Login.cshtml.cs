@@ -60,6 +60,9 @@ namespace bookingWEB.Pages
             // ✅ Kimlik cookie olarak yazılıyor
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
 
+            // ✅ Email'i Session'a yaz
+            HttpContext.Session.SetString("UserEmail", user.Email);
+
             // 🧭 Giriş başarılı, yönlendir
             return Redirect(returnUrl ?? "/BookingDashboard");
         }

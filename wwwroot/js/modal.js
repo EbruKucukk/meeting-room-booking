@@ -4,23 +4,21 @@
     return div.innerHTML;
 }
 
-// 📅 Yeni toplantı oluşturma modalı
 function openCreateModal(info, jsEvent) {
     document.querySelectorAll('.modal-floating').forEach(m => m.remove());
 
     const modal = document.createElement('div');
     modal.className = 'modal-floating';
 
-    // Ekran ortasında göster
     Object.assign(modal.style, {
         position: 'absolute',
         width: '500px',
         maxWidth: '95vw',
         maxHeight: '90vh',
         overflowY: 'auto',
-        background: 'white',
-        borderRadius: '12px',
-        boxShadow: '0 0 30px rgba(0,0,0,0.2)',
+        background: 'rgba(255, 255, 255, 0.95)',
+        borderRadius: '16px',
+        boxShadow: '0 10px 40px rgba(0,0,0,0.3)',
         padding: '24px',
         zIndex: 9999,
         opacity: '0',
@@ -30,30 +28,24 @@ function openCreateModal(info, jsEvent) {
 
     document.body.appendChild(modal);
 
-    // Konumlandırma
     requestAnimationFrame(() => {
         const { width, height } = modal.getBoundingClientRect();
         const margin = 16;
         let left = jsEvent.pageX + margin;
         let top = jsEvent.pageY + margin;
 
-        // Sağdan taşarsa sola kaydır
         if (left + width > window.innerWidth - margin) {
             left = jsEvent.pageX - width - margin;
         }
-
-        // Aşağıdan taşarsa yukarı kaydır
         if (top + height > window.innerHeight - margin) {
             top = jsEvent.pageY - height - margin;
         }
 
-        // Uygula
-        modal.style.left = `${Math.max(margin, left)}px`;
-        modal.style.top = `${Math.max(margin, top)}px`;
+        modal.style.left = `${Math.min(window.innerWidth - width - margin, Math.max(margin, left))}px`;
+        modal.style.top = `${Math.min(window.innerHeight - height - margin, Math.max(margin, top))}px`;
         modal.style.opacity = '1';
         modal.style.transform = 'scale(1)';
     });
-
 
     modal.innerHTML = `
         <div class="modal-content">
@@ -66,19 +58,18 @@ function openCreateModal(info, jsEvent) {
                 <input name="roomName" required />
 
                 <input type="hidden" name="selectedDate" value="${info.dateStr}" />
+                
                 <label>Saat:</label>
                 <input type="time" name="selectedTime" required />
-
+                
                 <label>Bitiş Saati:</label>
                 <input type="time" name="endTime" required />
 
-                <label>Organizatör:</label>
-                <select id="organizerSelect" name="organizer" required>
-                    <option value="">Seçiniz</option>
-                </select>
+                <label>Katılımcılar:</label>
+                <div id="katilimciContainer"></div> <!-- 🔁 Autocomplete input buraya eklenecek -->
 
                 <label>Açıklama:</label>
-                <textarea name="description" rows="4">Opsiyonel</textarea>
+                <textarea name="description" rows="4" placeholder="Açıklama (Opsiyonel)"></textarea>
 
                 <div class="modal-actions">
                     <button type="submit">Kaydet</button>
@@ -88,26 +79,37 @@ function openCreateModal(info, jsEvent) {
         </div>
     `;
 
-    document.body.appendChild(modal);
-    loadOrganizers();
+    // 🔁 Partial view HTML eklendikten sonra autocomplete başlat
+    const autocompleteTemplate = document.querySelector('#autocompleteTemplate');
+    if (autocompleteTemplate) {
+        const clone = autocompleteTemplate.cloneNode(true);
+        clone.style.display = 'block';
+        modal.querySelector('#katilimciContainer').appendChild(clone);
+        loadParticipantsAutocomplete(); // input geldikten sonra çağır
+    }
 
     modal.querySelector('#createForm').addEventListener('submit', async function (e) {
         e.preventDefault();
         const data = Object.fromEntries(new FormData(this).entries());
         const start = `${data.selectedDate}T${data.selectedTime}`;
         const end = `${data.selectedDate}T${data.endTime}`;
+
         if (start >= end) {
             alert("Bitiş saati başlangıç saatinden sonra olmalıdır.");
             return;
         }
+
+        const participantTags = Array.from(document.querySelectorAll('#selectedParticipants .tag'));
+        const participants = participantTags.map(tag => tag.dataset.email).join(",");
 
         const meetingData = {
             title: data.title,
             roomName: data.roomName,
             startTime: start,
             endTime: end,
-            organizer: data.organizer,
-            description: data.description
+            organizer: window.loggedInUser || "",
+            description: data.description,
+            participants
         };
 
         await createMeetingInApi(meetingData);
@@ -120,102 +122,80 @@ function openCreateModal(info, jsEvent) {
     });
 }
 
-function loadOrganizers() {
-    const select = document.getElementById("organizerSelect");
-    if (!select) return;
+// 🔎 Katılımcı autocomplete fonksiyonu
+function loadParticipantsAutocomplete() {
+    const input = document.getElementById("participantInput");
+    const suggestions = document.getElementById("suggestions");
+    const selected = document.getElementById("selectedParticipants");
+
+    if (!input || !suggestions || !selected) return;
+
+    let allUsers = [];
+    let selectedEmails = [];
 
     fetch("/api/kullanici")
         .then(res => res.json())
-        .then(users => {
-            select.innerHTML = '<option value="">Seçiniz</option>';
-            users.forEach(user => {
-                const option = document.createElement("option");
-                option.value = user.email;
-                option.textContent = `${user.adSoyad} (${user.email})`;
-                select.appendChild(option);
-            });
-        })
-        .catch(err => {
-            console.error("Organizatörler alınamadı:", err);
+        .then(users => allUsers = users);
+
+    input.addEventListener("input", function () {
+        const query = this.value.trim().toLowerCase();
+        suggestions.innerHTML = '';
+
+        if (query.length < 3) {
+            suggestions.style.display = "none";
+            return;
+        }
+
+        const matches = allUsers.filter(user =>
+            user.email.toLowerCase().startsWith(query) && !selectedEmails.includes(user.email)
+        );
+
+        if (matches.length > 0) {
+            suggestions.style.display = "block";
+        } else {
+            suggestions.style.display = "none";
+        }
+
+        matches.forEach(user => {
+            const div = document.createElement("div");
+            div.className = "suggestion-item";
+            div.textContent = `${user.adSoyad} (${user.email})`;
+            div.addEventListener("click", () => addEmail(user.email));
+            suggestions.appendChild(div);
         });
-}
+    });
 
-// 📆 Toplantı düzenleme modalı
-function openEditModal(event) {
-    document.querySelectorAll('.modal-floating').forEach(m => m.remove());
+    input.addEventListener("keydown", function (e) {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            const email = this.value.trim();
+            if (email && !selectedEmails.includes(email)) {
+                addEmail(email);
+            }
+        }
+    });
 
-    const modal = document.createElement('div');
-    modal.className = 'modal-floating';
+    function addEmail(email) {
+        selectedEmails.push(email);
 
-    const toLocalDatetimeString = (dt) => {
-        const offset = dt.getTimezoneOffset() * 60000;
-        return new Date(dt - offset).toISOString().slice(0, 16);
-    };
+        const tag = document.createElement("span");
+        tag.className = "tag";
+        tag.dataset.email = email;
+        tag.textContent = email;
 
-    modal.innerHTML = `
-        <div class="modal-content">
-            <h2>Toplantıyı Düzenle</h2>
-            <form id="editForm">
-                <label>Konu:</label>
-                <input name="title" value="${sanitize(event.title.split(' - ')[0])}" required />
-
-                <label>Oda Adı:</label>
-                <input name="roomName" value="${sanitize(event.extendedProps.roomName)}" required />
-
-                <label>Başlangıç:</label>
-                <input type="datetime-local" name="startTime" value="${toLocalDatetimeString(event.start)}" required />
-
-                <label>Bitiş:</label>
-                <input type="datetime-local" name="endTime" value="${event.end ? toLocalDatetimeString(event.end) : ''}" required />
-
-                <label>Düzenleyen:</label>
-                <select name="organizer" id="editOrganizerSelect" required>
-                    <option value="${event.extendedProps.organizer}">${sanitize(event.extendedProps.organizer)}</option>
-                </select>
-
-                <label>Açıklama:</label>
-                <textarea name="description" rows="4">${sanitize(event.extendedProps.description || '')}</textarea>
-
-                <div class="modal-actions">
-                    <button type="submit">Güncelle</button>
-                    <button type="button" onclick="this.closest('.modal-floating').remove()">İptal</button>
-                </div>
-            </form>
-        </div>
-    `;
-
-    document.body.appendChild(modal);
-
-    fetch('/api/kullanici')
-        .then(res => res.json())
-        .then(users => {
-            const select = modal.querySelector('#editOrganizerSelect');
-            select.innerHTML = '';
-            users.forEach(user => {
-                const option = document.createElement('option');
-                option.value = user.email;
-                option.textContent = `${user.adSoyad} (${user.email})`;
-                if (user.email === event.extendedProps.organizer) option.selected = true;
-                select.appendChild(option);
-            });
-        });
-
-    modal.querySelector('#editForm').addEventListener('submit', async function (e) {
-        e.preventDefault();
-        const formData = new FormData(this);
-        const updatedMeeting = {
-            title: formData.get("title"),
-            roomName: formData.get("roomName"),
-            startTime: formData.get("startTime"),
-            endTime: formData.get("endTime"),
-            organizer: formData.get("organizer"),
-            description: formData.get("description")
+        const close = document.createElement("button");
+        close.textContent = "×";
+        close.onclick = () => {
+            selectedEmails = selectedEmails.filter(e => e !== email);
+            tag.remove();
         };
 
-        await updateMeetingInApi(event.id, updatedMeeting);
-        modal.remove();
-        window.bookingCalendar.refetchEvents();
-    });
+        tag.appendChild(close);
+        selected.appendChild(tag);
+        input.value = '';
+        suggestions.innerHTML = '';
+        suggestions.style.display = 'none';
+    }
 }
 
-window.openEditModal = openEditModal;
+window.openCreateModal = openCreateModal;

@@ -25,4 +25,6 @@ public class Meeting
 
     [StringLength(int.MaxValue)] // nvarchar(max) uyumu
     public string Description { get; set; }
+    public string Participants { get; set; } // virgülle ayrılmış email listesi
+
 }

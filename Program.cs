@@ -4,52 +4,60 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// 🔹 Razor Pages aktif
+// 🔹 Razor Pages ve Controller desteği
 builder.Services.AddRazorPages();
+builder.Services.AddControllers(); // <== Controller'lar için şart
 
-// 🔹 Authentication + Authorization (Cookie ile)
+// 🔹 Cookie tabanlı kimlik doğrulama
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
-        options.LoginPath = "/Login"; // Giriş yapılmamışsa buraya yönlendir
-        options.AccessDeniedPath = "/AccessDenied"; // Yetki yoksa buraya yönlendir
+        options.LoginPath = "/Login";
+        options.AccessDeniedPath = "/AccessDenied";
         options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+        options.Cookie.HttpOnly = true;
+        options.Cookie.SameSite = SameSiteMode.Lax; // ⬅️ local ortamda sorun yaşamamak için
+        options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest; // ⬅️ localhost için güvenli
     });
 
 builder.Services.AddAuthorization();
 
-// 🔹 Veritabanı bağlantısı (senin yapına göre)
+// 🔹 Veritabanı bağlantısı
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// 🔹 Session middleware (eğer session kullanıyorsan)
+// 🔹 Session (isteğe bağlı)
 builder.Services.AddSession(options =>
 {
     options.IdleTimeout = TimeSpan.FromMinutes(30);
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
+    options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
+    options.Cookie.SameSite = SameSiteMode.Lax; // cross-origin sıkıntısını önler
+
 });
 
 var app = builder.Build();
 
-// Hata yönetimi
+// 🔸 Production error handling
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error");
     app.UseHsts();
 }
 
-// Middleware sıralaması
+// ✅ DOĞRU SIRALAMA ÇOK ÖNEMLİ
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+
 app.UseRouting();
 
-app.UseAuthentication();  // ⬅️ Giriş kontrolü burada başlar
-app.UseAuthorization();   // ⬅️ Yetki kontrolü burada işlenir
+app.UseSession(); // Eğer kullanıyorsan bu middleware burada olmalı
 
-app.UseSession();         // (opsiyonel: eğer session kullanıyorsan)
+app.UseAuthentication(); // ➕ Cookie doğrulama burada aktifleşir
+app.UseAuthorization();  // ➕ Yetki kontrolü burada yapılır
 
-app.MapRazorPages();
-app.MapControllers();     // API endpoint'leri için (örn: /api/meetings)
+app.MapRazorPages();     // Razor Pages için
+app.MapControllers();    // API Controller'lar için
 
 app.Run();

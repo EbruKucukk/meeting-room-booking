@@ -2,6 +2,9 @@
 using bookingWEB.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace bookingWEB.Controllers
 {
@@ -16,90 +19,81 @@ namespace bookingWEB.Controllers
             _context = context;
         }
 
-        // 🔍 GET: api/meetings
+        // GET: api/meetings
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Meeting>>> GetMeetings()
         {
-            return await _context.Meetings.ToListAsync();
+            var userEmail = HttpContext.Session.GetString("UserEmail");
+            if (string.IsNullOrEmpty(userEmail)) return Unauthorized();
+
+            var meetings = await _context.Meetings
+                .Where(m => m.Organizer == userEmail || m.Participants.Contains(userEmail))
+                .ToListAsync();
+
+            return Ok(meetings);
         }
 
-        // 🔍 GET: api/meetings/5
+        // GET: api/meetings/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Meeting>> GetMeeting(int id)
         {
             var meeting = await _context.Meetings.FindAsync(id);
-            if (meeting == null)
-                return NotFound();
+            if (meeting == null) return NotFound();
             return Ok(meeting);
         }
 
-        // ➕ POST: api/meetings
+        // POST: api/meetings
         [HttpPost]
         public async Task<ActionResult<Meeting>> CreateMeeting([FromBody] Meeting meeting)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            string insertQuery = $@"
-                INSERT INTO Meetings (Title, RoomName, StartTime, EndTime, Organizer, Description)
-                VALUES (@p0, @p1, @p2, @p3, @p4, @p5);
-            ";
+            var organizerEmail = HttpContext.Session.GetString("UserEmail");
+            if (string.IsNullOrEmpty(organizerEmail))
+                return Unauthorized();
 
-            await _context.Database.ExecuteSqlRawAsync(insertQuery,
-                meeting.Title,
-                meeting.RoomName,
-                meeting.StartTime,
-                meeting.EndTime,
-                meeting.Organizer,
-                meeting.Description ?? "");
+            meeting.Organizer = organizerEmail;
+            _context.Meetings.Add(meeting);
+            await _context.SaveChangesAsync();
 
-            return Ok("Toplantı başarıyla eklendi.");
+            return CreatedAtAction(nameof(GetMeeting), new { id = meeting.MeetingID }, meeting);
         }
 
-        // ✏️ PUT: api/meetings/5
+        // PUT: api/meetings/5
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateMeeting(int id, [FromBody] Meeting updated)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+            if (id != updated.MeetingID)
+                return BadRequest("ID uyuşmuyor.");
 
-            string updateQuery = $@"
-                UPDATE Meetings
-                SET Title = @p0,
-                    RoomName = @p1,
-                    StartTime = @p2,
-                    EndTime = @p3,
-                    Organizer = @p4,
-                    Description = @p5
-                WHERE meetingID = @p6;
-            ";
-
-            int affected = await _context.Database.ExecuteSqlRawAsync(updateQuery,
-                updated.Title,
-                updated.RoomName,
-                updated.StartTime,
-                updated.EndTime,
-                updated.Organizer,
-                updated.Description ?? "",
-                id);
-
-            if (affected == 0)
+            var meeting = await _context.Meetings.FindAsync(id);
+            if (meeting == null)
                 return NotFound();
 
-            return Ok("Toplantı güncellendi.");
+            meeting.Title = updated.Title;
+            meeting.RoomName = updated.RoomName;
+            meeting.StartTime = updated.StartTime;
+            meeting.EndTime = updated.EndTime;
+            meeting.Description = updated.Description;
+            meeting.Participants = updated.Participants;
+            // Organizer bilgisi güncellenmemeli!
+
+            await _context.SaveChangesAsync();
+            return NoContent();
         }
 
-        // ❌ DELETE: api/meetings/5
+        // DELETE: api/meetings/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteMeeting(int id)
         {
-            string deleteQuery = "DELETE FROM Meetings WHERE meetingID = @p0";
-            int affected = await _context.Database.ExecuteSqlRawAsync(deleteQuery, id);
-
-            if (affected == 0)
+            var meeting = await _context.Meetings.FindAsync(id);
+            if (meeting == null)
                 return NotFound();
 
-            return Ok("Toplantı silindi.");
+            _context.Meetings.Remove(meeting);
+            await _context.SaveChangesAsync();
+            return NoContent();
         }
     }
 }
