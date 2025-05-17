@@ -393,3 +393,18 @@ html, body {
     display: block;
     margin-bottom: 4px;
 }
+/* Örnek: her hücre yüksekliği aynı olsun */
+.fc-daygrid-day-frame {
+    min-height: 100px;
+    height: 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.month-label {
+    font-size: 12px;
+    font-weight: bold;
+    color: #999;
+    margin-bottom: 2px;
+}

@@ -1,7 +1,6 @@
 ﻿document.addEventListener('DOMContentLoaded', async function () {
-    let monthLabelRendered = false;
-
     const calendarEl = document.getElementById('calendarView');
+
     const calendar = new FullCalendar.Calendar(calendarEl, {
         initialView: 'dayGridMonth',
         locale: 'tr',
@@ -21,7 +20,7 @@
             today: 'Bugün',
             month: 'Aylık',
             week: 'Haftalık',
-            day: 'Günlük'
+            day: 'Çınlük'
         },
 
         events: fetchMeetingsFromApi,
@@ -74,43 +73,42 @@
                 e.preventDefault();
                 openEditModal(event);
             });
-        },
-
-        dayCellDidMount: function (info) {
-            if (monthLabelRendered) return;
-
-            setTimeout(() => {
-                const dayNumber = info.el.querySelector('.fc-daygrid-day-number')?.textContent?.trim();
-
-                const calendarMonth = info.view.currentStart.getMonth();
-                const calendarYear = info.view.currentStart.getFullYear();
-
-                const cellMonth = info.date.getMonth();
-                const cellYear = info.date.getFullYear();
-
-                const isFirstDayOfMonth = dayNumber === "1";
-                const centerDate = info.view.calendar.getDate(); // Bu doğru merkez tarihi verir
-                const isVisibleMonth = info.date.getMonth() === centerDate.getMonth() && info.date.getFullYear() === centerDate.getFullYear();
-
-                if (isFirstDayOfMonth && isVisibleMonth) {
-                    const badge = document.createElement("div");
-                    badge.className = "month-label first";
-                    badge.textContent = info.date.toLocaleDateString('tr-TR', { month: 'long' }).toUpperCase();
-                    info.el.prepend(badge);
-                    monthLabelRendered = true;
-                }
-            }, 10);
         }
     });
 
     calendar.on('datesSet', () => {
-        monthLabelRendered = false;
+        requestAnimationFrame(() => {
+            const allCells = document.querySelectorAll('.fc-daygrid-day');
+            let monthLabelAdded = false;
+
+            allCells.forEach(cell => {
+                const dateStr = cell.getAttribute('data-date');
+                if (!dateStr) return;
+
+                const dateObj = new Date(dateStr);
+                const isFirstDay = dateObj.getDate() === 1;
+
+                const currentMonth = calendar.view.currentStart.getMonth();
+                const currentYear = calendar.view.currentStart.getFullYear();
+
+                if (isFirstDay &&
+                    dateObj.getMonth() === currentMonth &&
+                    dateObj.getFullYear() === currentYear &&
+                    !monthLabelAdded) {
+
+                    const badge = document.createElement("div");
+                    badge.className = "month-label";
+                    badge.textContent = dateObj.toLocaleDateString('tr-TR', { month: 'long' }).toUpperCase();
+                    cell.prepend(badge);
+                    monthLabelAdded = true;
+                }
+            });
+        });
     });
 
     calendar.render();
     window.bookingCalendar = calendar;
 
-    // 👇 Bu kısmı dışarı aldık
     const calendarWrapper = document.querySelector('#calendarView');
     calendarWrapper.addEventListener('wheel', function (e) {
         const view = window.bookingCalendar.view;
