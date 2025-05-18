@@ -74,7 +74,7 @@
     `;
 
     loadParticipantsAutocomplete();
-
+    //const tagify = new Tagify(document.querySelector('input[name=participants]'));
     function loadParticipantsAutocomplete() {
         const input = modal.querySelector("#participantInput");
         const suggestions = modal.querySelector("#suggestions");
@@ -145,9 +145,16 @@
             suggestions.style.display = 'none';
         }
     }
-
     modal.querySelector('#createForm').addEventListener('submit', async function (e) {
         e.preventDefault();
+
+        // 🛡 Çift submit'i engelle
+        if (this.dataset.submitted === "true") {
+            console.warn("Form zaten gönderildi.");
+            return;
+        }
+        this.dataset.submitted = "true";
+
         const data = Object.fromEntries(new FormData(this).entries());
         const start = `${data.selectedDate}T${data.selectedTime}`;
         const end = `${data.selectedDate}T${data.endTime}`;
@@ -158,7 +165,7 @@
         }
 
         const participantTags = Array.from(modal.querySelectorAll('#selectedParticipants .tag'));
-        const participants = participantTags.map(tag => tag.dataset.email).join(",");
+        const participants = participantTags.map(tag => tag.dataset.email);
 
         const meetingData = {
             title: data.title,
@@ -170,7 +177,10 @@
             participants
         };
 
+        console.log("🔁 GÖNDERİLEN:", meetingData);
+
         await createMeetingInApi(meetingData);
+
         modal.remove();
         window.bookingCalendar.refetchEvents();
     });

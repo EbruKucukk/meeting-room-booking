@@ -1,4 +1,5 @@
-﻿async function fetchMeetingsFromApi(fetchInfo, successCallback, failureCallback) {
+﻿// 📅 Tüm toplantıları API'den al
+async function fetchMeetingsFromApi(fetchInfo, successCallback, failureCallback) {
     try {
         const res = await fetch('/api/meetings', {
             method: 'GET',
@@ -77,7 +78,7 @@ async function updateMeetingInApi(id, updatedData) {
         const response = await fetch(`/api/meetings/${id}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
-            credentials: 'include', // 🔐 Cookie ile gönder
+            credentials: 'include',
             body: JSON.stringify(updatedData)
         });
 
@@ -96,7 +97,7 @@ async function deleteMeetingFromApi(id) {
     try {
         const response = await fetch(`/api/meetings/${id}`, {
             method: 'DELETE',
-            credentials: 'include' // 🔐 Cookie ile gönder
+            credentials: 'include'
         });
 
         if (!response.ok) {
