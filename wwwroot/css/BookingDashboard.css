@@ -1,5 +1,4 @@
-﻿/* GENEL */
-html, body {
+﻿html, body {
     margin: 0;
     padding: 0;
     height: 100%;
@@ -112,12 +111,13 @@ html, body {
 #calendarView {
     flex-grow: 1;
     min-height: 0;
-    overflow-y: auto;
+    overflow: hidden !important; /* Scroll'u tamamen engelle */
     background-color: #f2f2f2;
     border-radius: 12px;
     padding: 10px;
+    height: calc(100vh - 120px); /* Yükseklik sınırla */
+    overflow: hidden !important; /* Scroll'u tamamen engelle */
 }
-
 /* FULLCALENDAR GENEL STİL */
 .fc {
     width: 100% !important;
@@ -139,6 +139,7 @@ html, body {
     box-shadow: 0 2px 6px rgba(0,0,0,0.2);
     white-space: normal;
 }
+
     .fc-event:hover {
         background-color: #cc0000 !important;
         cursor: pointer;
@@ -164,6 +165,7 @@ html, body {
     max-height: 90vh;
     overflow-y: auto;
 }
+
     .modal-content h2 {
         margin-top: 0;
         margin-bottom: 24px;
@@ -237,6 +239,7 @@ html, body {
     max-height: 90vh;
     overflow-y: auto;
 }
+
     .modal-floating .modal-content {
         box-sizing: border-box;
         overflow-y: auto;
@@ -253,12 +256,14 @@ html, body {
         transform: scale(1);
     }
 }
+
 .modal-floating input,
 .modal-floating select,
 .modal-floating textarea {
     width: 100%;
     box-sizing: border-box;
 }
+
 .custom-tooltip {
     position: absolute;
     background: #ffffff;
@@ -277,6 +282,7 @@ html, body {
     transform: translateY(5px);
     transition: opacity 0.25s ease, transform 0.25s ease;
 }
+
 .modern-tooltip {
     z-index: 9999;
     pointer-events: none;
@@ -303,6 +309,7 @@ html, body {
 .tooltip-row {
     margin-bottom: 4px;
 }
+
 .modern-tooltip {
     pointer-events: none; /* Tooltip tıklamayı engellemesin */
     position: absolute;
@@ -393,18 +400,72 @@ html, body {
     display: block;
     margin-bottom: 4px;
 }
-/* Örnek: her hücre yüksekliği aynı olsun */
 .fc-daygrid-day-frame {
     min-height: 100px;
     height: 100px;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
+    overflow: hidden;
+    padding: 4px;
+    box-sizing: border-box;
+}
+
+.fc-daygrid-day-number {
+    z-index: 1;
+    position: relative;
+    font-size: 14px;
+    color: #111;
+}
+
+.fc-daygrid-day {
+    min-width: 1px; /* Taşmaları engelle */
+    box-sizing: border-box;
+}
+
+.fc-daygrid-body {
+    width: 100%;
+    overflow: hidden;
+}
+
+.fc .month-label {
+    background: rgba(185, 28, 28, 0.08); /* Hafif kırmızı arka plan */
+    color: rgba(185, 28, 28, 0.75); /* Daha belirgin ama yumuşak kırmızı yazı */
+    font-weight: 600;
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 12px;
+    display: inline-block;
+    margin-bottom: 3px;
+    border: none;
+    box-shadow: none;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
 }
 
 .month-label {
-    font-size: 12px;
-    font-weight: bold;
-    color: #999;
-    margin-bottom: 2px;
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 10px;
+    background-color: rgba(255, 0, 0, 0.08); /* 🔴 Tatlı kırmızı zemin */
+    color: #d10000; /* 🔴 Belirgin kırmızı yazı */
+    border-radius: 12px;
+    margin-bottom: 4px;
+    margin-left: 2px;
+    pointer-events: none;
+    user-select: none;
+    font-family: 'Segoe UI', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: all 0.2s ease;
+}
+.fc .fc-daygrid-day .month-label {
+    background-color: rgba(255, 0, 0, 0.1) !important;
+    color: #cc0000 !important;
+    font-weight: bold !important;
+    padding: 4px 8px !important;
+    font-size: 10px !important;
+    border-radius: 10px !important;
+    text-transform: uppercase;
 }

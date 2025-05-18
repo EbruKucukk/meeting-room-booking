@@ -25,7 +25,32 @@
 
         events: fetchMeetingsFromApi,
 
-        dateClick: (info) => openCreateModal(info, info.jsEvent),
+        dateClick: (info) => {
+            const clickedDate = info.date;
+            const currentViewDate = calendar.view.currentStart;
+
+            const clickedMonth = clickedDate.getMonth();
+            const clickedYear = clickedDate.getFullYear();
+
+            const currentMonth = currentViewDate.getMonth();
+            const currentYear = currentViewDate.getFullYear();
+
+            const isFutureMonth =
+                clickedYear > currentYear ||
+                (clickedYear === currentYear && clickedMonth > currentMonth);
+
+            const isPastMonth =
+                clickedYear < currentYear ||
+                (clickedYear === currentYear && clickedMonth < currentMonth);
+
+            // 🔁 Başka bir aya ait bir günse → O aya git
+            if (isFutureMonth || isPastMonth) {
+                calendar.gotoDate(clickedDate); // 👈 Takvimi o güne götür
+            } else {
+                openCreateModal(info, info.jsEvent); // 👈 sadece bu aya aitse modalı aç
+            }
+        },
+
         eventClick: (info) => showEventModal(info),
 
         eventDidMount: function (info) {
@@ -78,8 +103,11 @@
 
     calendar.on('datesSet', () => {
         requestAnimationFrame(() => {
+            // Önceki etiketleri temizle
+            document.querySelectorAll('.month-label').forEach(label => label.remove());
+
             const allCells = document.querySelectorAll('.fc-daygrid-day');
-            let monthLabelAdded = false;
+            let addedMonths = new Set(); // 🔄 Aynı ay için tekrar yazmamak için
 
             allCells.forEach(cell => {
                 const dateStr = cell.getAttribute('data-date');
@@ -88,23 +116,20 @@
                 const dateObj = new Date(dateStr);
                 const isFirstDay = dateObj.getDate() === 1;
 
-                const currentMonth = calendar.view.currentStart.getMonth();
-                const currentYear = calendar.view.currentStart.getFullYear();
-
-                if (isFirstDay &&
-                    dateObj.getMonth() === currentMonth &&
-                    dateObj.getFullYear() === currentYear &&
-                    !monthLabelAdded) {
-
-                    const badge = document.createElement("div");
-                    badge.className = "month-label";
-                    badge.textContent = dateObj.toLocaleDateString('tr-TR', { month: 'long' }).toUpperCase();
-                    cell.prepend(badge);
-                    monthLabelAdded = true;
+                if (isFirstDay) {
+                    const monthKey = `${dateObj.getFullYear()}-${dateObj.getMonth()}`;
+                    if (!addedMonths.has(monthKey)) {
+                        const badge = document.createElement("div");
+                        badge.className = "month-label";
+                        badge.textContent = dateObj.toLocaleDateString('tr-TR', { month: 'long' }).toUpperCase();
+                        cell.prepend(badge);
+                        addedMonths.add(monthKey);
+                    }
                 }
             });
         });
     });
+
 
     calendar.render();
     window.bookingCalendar = calendar;
