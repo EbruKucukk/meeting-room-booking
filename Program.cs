@@ -36,7 +36,7 @@ builder.Services.AddSession(options =>
     options.Cookie.SameSite = SameSiteMode.Lax; // cross-origin sıkıntısını önler
 
 });
-
+builder.Services.AddHttpContextAccessor(); // session'ı controller'da kullanmak için
 var app = builder.Build();
 
 // 🔸 Production error handling

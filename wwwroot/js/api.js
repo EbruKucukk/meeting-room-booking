@@ -1,10 +1,23 @@
-﻿// 📅 Tüm toplantıları API'den al
-async function fetchMeetingsFromApi(fetchInfo, successCallback, failureCallback) {
+﻿async function fetchMeetingsFromApi(fetchInfo, successCallback, failureCallback) {
     try {
         const res = await fetch('/api/meetings', {
             method: 'GET',
-            credentials: 'include' // 🔐 Oturum bilgisini gönder
+            credentials: 'include'
         });
+
+        if (!res.ok) {
+            const errText = await res.text();
+            console.error("API isteği başarısız:", errText);
+            failureCallback("API hatası");
+            return;
+        }
+
+        const contentType = res.headers.get("Content-Type") || "";
+        if (!contentType.includes("application/json")) {
+            console.warn("JSON olmayan yanıt:", contentType);
+            failureCallback("Yanıt JSON değil");
+            return;
+        }
 
         const data = await res.json();
 
@@ -27,9 +40,10 @@ async function fetchMeetingsFromApi(fetchInfo, successCallback, failureCallback)
         }));
 
         successCallback(events);
+
     } catch (err) {
-        console.error("Toplantılar API'den alınamadı:", err);
-        failureCallback(err);
+        console.error("Toplantılar alınamadı:", err);
+        failureCallback("Toplantılar alınamadı");
     }
 }
 
@@ -38,18 +52,22 @@ async function createMeetingInApi(meetingData) {
     try {
         const response = await fetch('/api/meetings', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            credentials: 'include', // 🔐 Cookie ile gönder
+            headers: {
+                'Content-Type': 'application/json'
+            },
             body: JSON.stringify(meetingData)
         });
 
         if (!response.ok) {
-            throw new Error("Toplantı oluşturulamadı");
+            const error = await response.text();
+            console.error("Toplantı eklenemedi:", error);
+            alert("Toplantı eklenemedi: " + error);
+        } else {
+            console.log("Toplantı başarıyla eklendi!");
         }
-
-        return await response.json();
-    } catch (error) {
-        console.error("❌ createMeetingInApi hatası:", error);
+    } catch (err) {
+        console.error("API hatası:", err);
+        alert("Toplantı oluşturulurken hata oluştu.");
     }
 }
 

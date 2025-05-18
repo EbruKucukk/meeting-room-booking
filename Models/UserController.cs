@@ -66,6 +66,9 @@ namespace bookingWEB.Controllers
             if (user == null || user.SifreHash != ComputeSha256Hash(model.Sifre))
                 return Unauthorized("Geçersiz email veya şifre");
 
+            // ✅ Başarılı login → oturumu başlat
+            HttpContext.Session.SetString("UserEmail", user.Email);
+
             return Ok(new
             {
                 message = "Giriş başarılı",
@@ -90,6 +93,7 @@ namespace bookingWEB.Controllers
         public string AdSoyad { get; set; }
         public string Email { get; set; }
         public string Sifre { get; set; }
+
     }
 
     public class KullaniciLoginDTO

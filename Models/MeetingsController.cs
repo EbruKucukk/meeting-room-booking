@@ -1,10 +1,9 @@
 ﻿using bookingWEB.Data;
 using bookingWEB.Models;
+using bookingWEB.Models.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 
 namespace bookingWEB.Controllers
 {
@@ -19,71 +18,51 @@ namespace bookingWEB.Controllers
             _context = context;
         }
 
-        // GET: api/meetings
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Meeting>>> GetMeetings()
+        [HttpPost]
+        public async Task<IActionResult> CreateMeeting([FromBody] MeetingCreateDto dto)
         {
             var userEmail = HttpContext.Session.GetString("UserEmail");
-            if (string.IsNullOrEmpty(userEmail)) return Unauthorized();
-
-            var meetings = await _context.Meetings
-                .Where(m => m.Organizer == userEmail || m.Participants.Contains(userEmail))
-                .ToListAsync();
-
-            return Ok(meetings);
-        }
-
-        // GET: api/meetings/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Meeting>> GetMeeting(int id)
-        {
-            var meeting = await _context.Meetings.FindAsync(id);
-            if (meeting == null) return NotFound();
-            return Ok(meeting);
-        }
-
-        // POST: api/meetings
-        [HttpPost]
-        public async Task<ActionResult<Meeting>> CreateMeeting([FromBody] Meeting meeting)
-        {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
-            var organizerEmail = HttpContext.Session.GetString("UserEmail");
-            if (string.IsNullOrEmpty(organizerEmail))
+            if (string.IsNullOrEmpty(userEmail))
                 return Unauthorized();
 
-            meeting.Organizer = organizerEmail;
+            var meeting = new Meeting
+            {
+                Title = dto.Title,
+                RoomName = dto.RoomName,
+                StartTime = dto.StartTime,
+                EndTime = dto.EndTime,
+                Organizer = userEmail,
+                Description = dto.Description,
+                Participants = string.Join(",", dto.Participants)
+            };
+
             _context.Meetings.Add(meeting);
             await _context.SaveChangesAsync();
-
-            return CreatedAtAction(nameof(GetMeeting), new { id = meeting.MeetingID }, meeting);
+            return Ok();
         }
 
-        // PUT: api/meetings/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateMeeting(int id, [FromBody] Meeting updated)
+        public async Task<IActionResult> UpdateMeeting(int id, [FromBody] MeetingUpdateDto dto)
         {
-            if (id != updated.MeetingID)
-                return BadRequest("ID uyuşmuyor.");
-
             var meeting = await _context.Meetings.FindAsync(id);
             if (meeting == null)
                 return NotFound();
 
-            meeting.Title = updated.Title;
-            meeting.RoomName = updated.RoomName;
-            meeting.StartTime = updated.StartTime;
-            meeting.EndTime = updated.EndTime;
-            meeting.Description = updated.Description;
-            meeting.Participants = updated.Participants;
-            // Organizer bilgisi güncellenmemeli!
+            var userEmail = HttpContext.Session.GetString("UserEmail");
+            if (meeting.Organizer != userEmail)
+                return Forbid();
+
+            meeting.Title = dto.Title;
+            meeting.RoomName = dto.RoomName;
+            meeting.StartTime = dto.StartTime;
+            meeting.EndTime = dto.EndTime;
+            meeting.Description = dto.Description;
+            meeting.Participants = string.Join(",", dto.Participants);
 
             await _context.SaveChangesAsync();
             return NoContent();
         }
 
-        // DELETE: api/meetings/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteMeeting(int id)
         {
@@ -91,9 +70,19 @@ namespace bookingWEB.Controllers
             if (meeting == null)
                 return NotFound();
 
+            var userEmail = HttpContext.Session.GetString("UserEmail");
+            if (meeting.Organizer != userEmail)
+                return Forbid();
+
             _context.Meetings.Remove(meeting);
             await _context.SaveChangesAsync();
             return NoContent();
+        }
+        [HttpGet]
+        public async Task<IActionResult> GetMeetings()
+        {
+            var meetings = await _context.Meetings.ToListAsync();
+            return Ok(meetings);
         }
     }
 }

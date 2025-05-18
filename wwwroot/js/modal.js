@@ -100,16 +100,15 @@ function openCreateModal(info, jsEvent) {
         }
 
         const participantTags = Array.from(document.querySelectorAll('#selectedParticipants .tag'));
-        const participants = participantTags.map(tag => tag.dataset.email).join(",");
+        const participants = participantTags.map(tag => tag.dataset.email);
 
         const meetingData = {
             title: data.title,
             roomName: data.roomName,
             startTime: start,
             endTime: end,
-            organizer: window.loggedInUser || "",
             description: data.description,
-            participants
+            participants: participants // artık dizi olarak gidiyor
         };
 
         await createMeetingInApi(meetingData);
