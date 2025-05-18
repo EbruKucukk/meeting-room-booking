@@ -9,6 +9,7 @@
         selectable: true,
         nowIndicator: true,
         timeZone: 'local',
+        fixedWeekCount: true, // 6 haftayı sabit göster
 
         headerToolbar: {
             left: 'prev,next today',
@@ -20,7 +21,7 @@
             today: 'Bugün',
             month: 'Aylık',
             week: 'Haftalık',
-            day: 'Çınlük'
+            day: 'Günlük'
         },
 
         events: fetchMeetingsFromApi,
@@ -31,23 +32,16 @@
 
             const clickedMonth = clickedDate.getMonth();
             const clickedYear = clickedDate.getFullYear();
-
             const currentMonth = currentViewDate.getMonth();
             const currentYear = currentViewDate.getFullYear();
 
-            const isFutureMonth =
-                clickedYear > currentYear ||
-                (clickedYear === currentYear && clickedMonth > currentMonth);
+            const isFutureMonth = clickedYear > currentYear || (clickedYear === currentYear && clickedMonth > currentMonth);
+            const isPastMonth = clickedYear < currentYear || (clickedYear === currentYear && clickedMonth < currentMonth);
 
-            const isPastMonth =
-                clickedYear < currentYear ||
-                (clickedYear === currentYear && clickedMonth < currentMonth);
-
-            // 🔁 Başka bir aya ait bir günse → O aya git
             if (isFutureMonth || isPastMonth) {
-                calendar.gotoDate(clickedDate); // 👈 Takvimi o güne götür
+                calendar.gotoDate(clickedDate);
             } else {
-                openCreateModal(info, info.jsEvent); // 👈 sadece bu aya aitse modalı aç
+                openCreateModal(info, info.jsEvent);
             }
         },
 
@@ -73,17 +67,51 @@
                 `;
                 document.body.appendChild(tooltip);
                 tooltip.style.position = "absolute";
-                tooltip.style.left = `${e.pageX + 12}px`;
-                tooltip.style.top = `${e.pageY + 12}px`;
                 tooltip.style.opacity = "0";
                 tooltip.style.transition = "opacity 0.2s ease";
-                requestAnimationFrame(() => tooltip.style.opacity = "1");
+
+                const tooltipWidth = 380;
+                const tooltipHeight = 240;
+                const viewportWidth = window.innerWidth;
+                const viewportHeight = window.innerHeight;
+
+                let left = e.pageX + 16;
+                let top = e.pageY + 16;
+
+                if (left + tooltipWidth > viewportWidth - 10) {
+                    left = e.pageX - tooltipWidth - 16;
+                }
+                if (top + tooltipHeight > viewportHeight - 10) {
+                    top = e.pageY - tooltipHeight - 16;
+                }
+
+                tooltip.style.left = `${left}px`;
+                tooltip.style.top = `${top}px`;
+
+                requestAnimationFrame(() => {
+                    tooltip.style.opacity = "1";
+                });
             });
 
             el.addEventListener("mousemove", (e) => {
                 if (tooltip) {
-                    tooltip.style.left = `${e.pageX + 12}px`;
-                    tooltip.style.top = `${e.pageY + 12}px`;
+                    let left = e.pageX + 16;
+                    let top = e.pageY + 16;
+
+                    const tooltipWidth = 380;
+                    const tooltipHeight = 240;
+                    const viewportWidth = window.innerWidth;
+                    const viewportHeight = window.innerHeight;
+
+                    if (left + tooltipWidth > viewportWidth - 10) {
+                        left = e.pageX - tooltipWidth - 16;
+                    }
+                    if (top + tooltipHeight > viewportHeight - 10) {
+                        top = e.pageY - tooltipHeight - 16;
+                    }
+
+                    tooltip.style.left = `${left}px`;
+                    tooltip.style.top = `${top}px`;
                 }
             });
 
@@ -102,21 +130,18 @@
     });
 
     calendar.on('datesSet', () => {
+        document.querySelectorAll('.modal-floating').forEach(m => m.remove());
         requestAnimationFrame(() => {
-            // Önceki etiketleri temizle
             document.querySelectorAll('.month-label').forEach(label => label.remove());
-
             const allCells = document.querySelectorAll('.fc-daygrid-day');
-            let addedMonths = new Set(); // 🔄 Aynı ay için tekrar yazmamak için
+            const addedMonths = new Set();
 
             allCells.forEach(cell => {
                 const dateStr = cell.getAttribute('data-date');
                 if (!dateStr) return;
 
                 const dateObj = new Date(dateStr);
-                const isFirstDay = dateObj.getDate() === 1;
-
-                if (isFirstDay) {
+                if (dateObj.getDate() === 1) {
                     const monthKey = `${dateObj.getFullYear()}-${dateObj.getMonth()}`;
                     if (!addedMonths.has(monthKey)) {
                         const badge = document.createElement("div");
@@ -130,20 +155,13 @@
         });
     });
 
-
     calendar.render();
     window.bookingCalendar = calendar;
 
     const calendarWrapper = document.querySelector('#calendarView');
     calendarWrapper.addEventListener('wheel', function (e) {
-        const view = window.bookingCalendar.view;
-        if (view.type !== "dayGridMonth") return;
-
+        if (calendar.view.type !== "dayGridMonth") return;
         e.preventDefault();
-        if (e.deltaY < 0) {
-            window.bookingCalendar.prev();
-        } else {
-            window.bookingCalendar.next();
-        }
+        e.deltaY < 0 ? calendar.prev() : calendar.next();
     }, { passive: false });
 });

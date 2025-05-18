@@ -1,10 +1,4 @@
-﻿function sanitize(text) {
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
-}
-
-function openCreateModal(info, jsEvent) {
+﻿function openCreateModal(info, jsEvent) {
     document.querySelectorAll('.modal-floating').forEach(m => m.remove());
 
     const modal = document.createElement('div');
@@ -12,25 +6,21 @@ function openCreateModal(info, jsEvent) {
 
     Object.assign(modal.style, {
         position: 'absolute',
-        width: '500px',
-        maxWidth: '95vw',
+        width: '380px',
+        background: 'white',
+        borderRadius: '16px',
+        boxShadow: '0 12px 40px rgba(0,0,0,0.25)',
+        zIndex: 9999,
         maxHeight: '90vh',
         overflowY: 'auto',
-        background: 'rgba(255, 255, 255, 0.95)',
-        borderRadius: '16px',
-        boxShadow: '0 10px 40px rgba(0,0,0,0.3)',
-        padding: '24px',
-        zIndex: 9999,
-        opacity: '0',
-        transform: 'scale(0.95)',
-        transition: 'opacity 0.2s ease, transform 0.2s ease'
+        animation: 'fadeIn 0.2s ease-out'
     });
 
     document.body.appendChild(modal);
 
     requestAnimationFrame(() => {
         const { width, height } = modal.getBoundingClientRect();
-        const margin = 16;
+        const margin = 20;
         let left = jsEvent.pageX + margin;
         let top = jsEvent.pageY + margin;
 
@@ -41,16 +31,16 @@ function openCreateModal(info, jsEvent) {
             top = jsEvent.pageY - height - margin;
         }
 
-        modal.style.left = `${Math.min(window.innerWidth - width - margin, Math.max(margin, left))}px`;
-        modal.style.top = `${Math.min(window.innerHeight - height - margin, Math.max(margin, top))}px`;
-        modal.style.opacity = '1';
-        modal.style.transform = 'scale(1)';
+        modal.style.left = `${Math.max(margin, left)}px`;
+        modal.style.top = `${Math.max(margin, top)}px`;
     });
 
     modal.innerHTML = `
         <div class="modal-content">
-            <h2>Yeni Toplantı</h2>
-            <form id="createForm">
+            <div style="background:#d10000;padding:12px 16px;border-radius:12px 12px 0 0;color:white;font-weight:bold;font-size:15px">
+                Yeni Toplantı
+            </div>
+            <form id="createForm" style="padding:20px;">
                 <label>Konu:</label>
                 <input name="title" required />
 
@@ -58,34 +48,102 @@ function openCreateModal(info, jsEvent) {
                 <input name="roomName" required />
 
                 <input type="hidden" name="selectedDate" value="${info.dateStr}" />
-                
+
                 <label>Saat:</label>
                 <input type="time" name="selectedTime" required />
-                
+
                 <label>Bitiş Saati:</label>
                 <input type="time" name="endTime" required />
 
                 <label>Katılımcılar:</label>
-                <div id="katilimciContainer"></div> <!-- 🔁 Autocomplete input buraya eklenecek -->
+                <div id="katilimciContainer">
+                    <div id="selectedParticipants"></div>
+                    <input type="text" id="participantInput" placeholder="E-posta girin veya seçin" />
+                    <div id="suggestions" class="suggestion-list"></div>
+                </div>
 
                 <label>Açıklama:</label>
                 <textarea name="description" rows="4" placeholder="Açıklama (Opsiyonel)"></textarea>
 
-                <div class="modal-actions">
-                    <button type="submit">Kaydet</button>
-                    <button type="button" onclick="this.closest('.modal-floating').remove()">İptal</button>
+                <div style="margin-top:20px;display:flex;gap:10px;justify-content:flex-end;">
+                    <button type="submit" style="background:#d10000;color:white;padding:8px 16px;border:none;border-radius:6px;font-weight:600;cursor:pointer">Kaydet</button>
+                    <button type="button" onclick="this.closest('.modal-floating').remove()" style="background:#eee;padding:8px 16px;border:none;border-radius:6px;font-weight:600;cursor:pointer">İptal</button>
                 </div>
             </form>
         </div>
     `;
 
-    // 🔁 Partial view HTML eklendikten sonra autocomplete başlat
-    const autocompleteTemplate = document.querySelector('#autocompleteTemplate');
-    if (autocompleteTemplate) {
-        const clone = autocompleteTemplate.cloneNode(true);
-        clone.style.display = 'block';
-        modal.querySelector('#katilimciContainer').appendChild(clone);
-        loadParticipantsAutocomplete(); // input geldikten sonra çağır
+    loadParticipantsAutocomplete();
+
+    function loadParticipantsAutocomplete() {
+        const input = modal.querySelector("#participantInput");
+        const suggestions = modal.querySelector("#suggestions");
+        const selected = modal.querySelector("#selectedParticipants");
+
+        if (!input || !suggestions || !selected) return;
+
+        let allUsers = [];
+        let selectedEmails = [];
+
+        fetch("/api/kullanici")
+            .then(res => res.json())
+            .then(users => allUsers = users);
+
+        input.addEventListener("input", function () {
+            const query = this.value.trim().toLowerCase();
+            suggestions.innerHTML = '';
+
+            if (query.length < 2) {
+                suggestions.style.display = "none";
+                return;
+            }
+
+            const matches = allUsers.filter(user =>
+                user.email.toLowerCase().includes(query) && !selectedEmails.includes(user.email)
+            );
+
+            suggestions.style.display = matches.length > 0 ? "block" : "none";
+
+            matches.forEach(user => {
+                const div = document.createElement("div");
+                div.className = "suggestion-item";
+                div.textContent = `${user.adSoyad} (${user.email})`;
+                div.addEventListener("click", () => addEmail(user.email));
+                suggestions.appendChild(div);
+            });
+        });
+
+        input.addEventListener("keydown", function (e) {
+            if (e.key === "Enter") {
+                e.preventDefault();
+                const email = this.value.trim();
+                if (email && !selectedEmails.includes(email)) {
+                    addEmail(email);
+                }
+            }
+        });
+
+        function addEmail(email) {
+            selectedEmails.push(email);
+
+            const tag = document.createElement("span");
+            tag.className = "tag";
+            tag.dataset.email = email;
+            tag.textContent = email;
+
+            const close = document.createElement("button");
+            close.textContent = "×";
+            close.onclick = () => {
+                selectedEmails = selectedEmails.filter(e => e !== email);
+                tag.remove();
+            };
+
+            tag.appendChild(close);
+            selected.appendChild(tag);
+            input.value = '';
+            suggestions.innerHTML = '';
+            suggestions.style.display = 'none';
+        }
     }
 
     modal.querySelector('#createForm').addEventListener('submit', async function (e) {
@@ -99,16 +157,17 @@ function openCreateModal(info, jsEvent) {
             return;
         }
 
-        const participantTags = Array.from(document.querySelectorAll('#selectedParticipants .tag'));
-        const participants = participantTags.map(tag => tag.dataset.email);
+        const participantTags = Array.from(modal.querySelectorAll('#selectedParticipants .tag'));
+        const participants = participantTags.map(tag => tag.dataset.email).join(",");
 
         const meetingData = {
             title: data.title,
             roomName: data.roomName,
             startTime: start,
             endTime: end,
+            organizer: window.loggedInUser || "",
             description: data.description,
-            participants: participants // artık dizi olarak gidiyor
+            participants
         };
 
         await createMeetingInApi(meetingData);
@@ -120,81 +179,3 @@ function openCreateModal(info, jsEvent) {
         if (this.value === 'Opsiyonel') this.value = '';
     });
 }
-
-// 🔎 Katılımcı autocomplete fonksiyonu
-function loadParticipantsAutocomplete() {
-    const input = document.getElementById("participantInput");
-    const suggestions = document.getElementById("suggestions");
-    const selected = document.getElementById("selectedParticipants");
-
-    if (!input || !suggestions || !selected) return;
-
-    let allUsers = [];
-    let selectedEmails = [];
-
-    fetch("/api/kullanici")
-        .then(res => res.json())
-        .then(users => allUsers = users);
-
-    input.addEventListener("input", function () {
-        const query = this.value.trim().toLowerCase();
-        suggestions.innerHTML = '';
-
-        if (query.length < 3) {
-            suggestions.style.display = "none";
-            return;
-        }
-
-        const matches = allUsers.filter(user =>
-            user.email.toLowerCase().startsWith(query) && !selectedEmails.includes(user.email)
-        );
-
-        if (matches.length > 0) {
-            suggestions.style.display = "block";
-        } else {
-            suggestions.style.display = "none";
-        }
-
-        matches.forEach(user => {
-            const div = document.createElement("div");
-            div.className = "suggestion-item";
-            div.textContent = `${user.adSoyad} (${user.email})`;
-            div.addEventListener("click", () => addEmail(user.email));
-            suggestions.appendChild(div);
-        });
-    });
-
-    input.addEventListener("keydown", function (e) {
-        if (e.key === "Enter") {
-            e.preventDefault();
-            const email = this.value.trim();
-            if (email && !selectedEmails.includes(email)) {
-                addEmail(email);
-            }
-        }
-    });
-
-    function addEmail(email) {
-        selectedEmails.push(email);
-
-        const tag = document.createElement("span");
-        tag.className = "tag";
-        tag.dataset.email = email;
-        tag.textContent = email;
-
-        const close = document.createElement("button");
-        close.textContent = "×";
-        close.onclick = () => {
-            selectedEmails = selectedEmails.filter(e => e !== email);
-            tag.remove();
-        };
-
-        tag.appendChild(close);
-        selected.appendChild(tag);
-        input.value = '';
-        suggestions.innerHTML = '';
-        suggestions.style.display = 'none';
-    }
-}
-
-window.openCreateModal = openCreateModal;

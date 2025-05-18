@@ -1,24 +1,22 @@
-﻿html, body {
+﻿/* === GENEL === */
+html, body {
     margin: 0;
     padding: 0;
     height: 100%;
-    font-family: 'Segoe UI', sans-serif;
-    background-color: #f9f9f9;
-    font-size: 16px;
-    box-sizing: border-box;
-    overflow: hidden; /* scroll sorunu çözümü */
     width: 100%;
-    overflow-x: hidden; /* Sağa scroll bar'ı tamamen engeller */
-}
-
-/* ANA KONTEYNER */
-.dashboard-container {
-    display: flex;
-    height: 100%;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #f7f7f7;
+    font-size: 15px;
+    box-sizing: border-box;
     overflow: hidden;
 }
 
-/* SIDEBAR */
+.dashboard-container {
+    display: flex;
+    height: 100%;
+}
+
+/* === SIDEBAR === */
 .sidebar {
     width: 280px;
     background-color: #FF0000;
@@ -67,11 +65,9 @@
     margin-top: auto;
     font-size: 18px;
     padding-top: 40px;
-    text-align: left;
 }
 
 .welcome {
-    font-size: 18px;
     margin: 0;
     opacity: 0.9;
     font-weight: 500;
@@ -84,167 +80,213 @@
     color: #ffffff;
 }
 
-/* ANA İÇERİK */
+/* === TAKVİM ANA ALANI === */
 .main-content {
     flex-grow: 1;
     display: flex;
     flex-direction: column;
-    overflow: hidden;
     padding: 20px;
-    background-color: #ffffff;
+    background-color: #fff;
 }
 
-/* TAKVİM BAŞLIK ALANI */
-.calendar-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
+.calendar-header h1 {
+    font-size: 28px;
+    margin-bottom: 10px;
 }
 
-    .calendar-header h1 {
-        font-size: 28px;
-        margin: 0;
-    }
-
-/* TAKVİM GÖRÜNÜMÜ */
 #calendarView {
     flex-grow: 1;
-    min-height: 0;
-    overflow: hidden !important; /* Scroll'u tamamen engelle */
     background-color: #f2f2f2;
     border-radius: 12px;
     padding: 10px;
-    height: calc(100vh - 120px); /* Yükseklik sınırla */
-    overflow: hidden !important; /* Scroll'u tamamen engelle */
-}
-/* FULLCALENDAR GENEL STİL */
-.fc {
-    width: 100% !important;
-    height: 100% !important;
-    font-size: 14px;
-    box-sizing: border-box;
-    overflow: hidden;
+    height: calc(100vh - 120px);
 }
 
-/* EVENT GÖRÜNÜMÜ */
+/* === FullCalendar === */
+.fc {
+    font-size: 14px;
+}
+
 .fc-event {
-    background-color: #FF0000 !important; /* Sidebar kırmızı */
+    background-color: #cc0000 !important;
     color: white !important;
     border: none;
     padding: 6px 8px;
     border-radius: 8px;
     font-weight: bold;
     font-size: 14px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
     white-space: normal;
 }
 
     .fc-event:hover {
-        background-color: #cc0000 !important;
+        background-color: #a80000 !important;
         cursor: pointer;
     }
 
-.modal-overlay {
-    position: fixed;
-    inset: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-}
-
-.modal-content {
-    background-color: white;
-    padding: 40px 32px;
-    border-radius: 16px;
-    width: 420px;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+/* === AYLAR ETİKET === */
+.month-label {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 10px;
+    background-color: rgba(255, 0, 0, 0.08);
+    color: #d10000;
+    border-radius: 12px;
+    margin-bottom: 4px;
+    margin-left: 2px;
+    pointer-events: none;
+    user-select: none;
     font-family: 'Segoe UI', sans-serif;
-    max-height: 90vh;
-    overflow-y: auto;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
-    .modal-content h2 {
-        margin-top: 0;
-        margin-bottom: 24px;
-        font-size: 24px;
-        color: #222;
-        font-weight: 600;
+/* === TOOLTIP === */
+.modern-tooltip {
+    position: absolute;
+    z-index: 9999;
+    pointer-events: none;
+    max-width: 400px;
+    width: 380px;
+    background: #fff0f0;
+    border: 1px solid #ffcccc;
+    border-radius: 16px;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 14px;
+    animation: fadeIn 0.25s ease-out;
+    overflow: hidden;
+    padding: 0;
+}
+
+.tooltip-card {
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.tooltip-title {
+    background-color: #d60000;
+    color: white;
+    font-weight: bold;
+    padding: 12px 16px;
+    font-size: 16px;
+}
+
+.tooltip-row {
+    padding: 10px 16px;
+    border-top: 1px solid #f5cfcf;
+    color: #333;
+}
+
+    .tooltip-row b {
+        display: inline-block;
+        min-width: 100px;
+        color: #000;
+    }
+.modal-floating {
+    position: absolute;
+    z-index: 1000;
+    width: 420px;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    overflow: hidden;
+    font-family: 'Segoe UI', sans-serif;
+    animation: fadeIn 0.2s ease-out;
+}
+
+    .modal-floating .modal-content {
+        padding: 0;
     }
 
-    .modal-content label {
-        display: block;
-        font-size: 15px;
-        margin-bottom: 6px;
-        color: #333;
-    }
-
-    .modal-content input {
-        width: 100%;
-        padding: 10px 14px;
-        font-size: 15px;
-        border: 1px solid #ccc;
-        border-radius: 8px;
-        margin-bottom: 16px;
-        box-sizing: border-box;
-        transition: border 0.3s ease;
-    }
-
-        .modal-content input:focus {
-            outline: none;
-            border-color: #FF0000;
+        /* Başlık - kırmızı üst bant */
+        .modal-floating .modal-content h2 {
+            margin: 0;
+            background-color: #cc0000;
+            color: white;
+            padding: 16px 24px;
+            font-size: 18px;
+            font-weight: 600;
+            border-top-left-radius: 16px;
+            border-top-right-radius: 16px;
         }
 
-    .modal-content button {
-        padding: 10px 20px;
-        font-size: 14px;
-        font-weight: 600;
-        margin-right: 10px;
-        border: none;
-        border-radius: 6px;
-        cursor: pointer;
-        transition: background 0.3s ease;
+    /* Form gövdesi */
+    .modal-floating form {
+        padding: 24px;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
     }
 
-        .modal-content button[type="submit"] {
-            background-color: #FF0000;
+    /* Etiketler */
+    .modal-floating label {
+        font-weight: bold;
+        font-size: 14px;
+        margin-bottom: 4px;
+    }
+
+    /* Girişler */
+    .modal-floating input,
+    .modal-floating textarea {
+        width: 100%;
+        padding: 10px;
+        border-radius: 8px;
+        border: 1px solid #ddd;
+        font-size: 14px;
+        box-sizing: border-box;
+    }
+
+        .modal-floating input:focus,
+        .modal-floating textarea:focus {
+            border-color: #cc0000;
+            outline: none;
+        }
+
+/* Katılımcı seçimi özel alan */
+#katilimciContainer {
+    margin-top: 4px;
+}
+
+/* Butonlar */
+.modal-floating .modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 12px;
+}
+
+    .modal-floating .modal-actions button {
+        padding: 10px 16px;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 14px;
+        border: none;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+    }
+
+        .modal-floating .modal-actions button[type="submit"] {
+            background-color: #cc0000;
             color: white;
         }
 
-            .modal-content button[type="submit"]:hover {
-                background-color: #cc0000;
+            .modal-floating .modal-actions button[type="submit"]:hover {
+                background-color: #a00000;
             }
 
-        .modal-content button[type="button"] {
+        .modal-floating .modal-actions button[type="button"] {
             background-color: #eee;
             color: #333;
         }
 
-            .modal-content button[type="button"]:hover {
+            .modal-floating .modal-actions button[type="button"]:hover {
                 background-color: #ddd;
             }
 
-.modal-floating {
-    position: absolute;
-    z-index: 1000;
-    width: 300px;
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-    padding: 20px;
-    animation: fadeIn 0.2s ease-out;
-    box-sizing: border-box;
-    max-height: 90vh;
-    overflow-y: auto;
-}
-
-    .modal-floating .modal-content {
-        box-sizing: border-box;
-        overflow-y: auto;
-    }
-
+/* Geçiş efekti */
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -256,216 +298,42 @@
         transform: scale(1);
     }
 }
-
-.modal-floating input,
-.modal-floating select,
-.modal-floating textarea {
-    width: 100%;
-    box-sizing: border-box;
-}
-
-.custom-tooltip {
-    position: absolute;
-    background: #ffffff;
-    border: 1px solid #dcdcdc;
-    border-radius: 16px;
-    padding: 16px 20px;
-    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.1);
-    color: #2e2e2e;
-    font-family: 'Segoe UI', sans-serif;
-    font-size: 14px;
-    max-width: 340px;
-    line-height: 1.6;
-    z-index: 9999;
-    pointer-events: none;
-    opacity: 0;
-    transform: translateY(5px);
-    transition: opacity 0.25s ease, transform 0.25s ease;
-}
-
-.modern-tooltip {
-    z-index: 9999;
-    pointer-events: none;
-}
-
-.tooltip-card {
-    background-color: #eaf4ff;
-    border-radius: 12px;
-    padding: 16px;
-    box-shadow: 0 0 12px rgba(0, 0, 0, 0.2);
-    font-size: 14px;
-    max-width: 300px;
-    color: #333;
-    font-family: 'Segoe UI', sans-serif;
-}
-
-.tooltip-title {
-    font-weight: bold;
-    font-size: 16px;
-    color: #00457c;
-    margin-bottom: 8px;
-}
-
-.tooltip-row {
-    margin-bottom: 4px;
-}
-
-.modern-tooltip {
-    pointer-events: none; /* Tooltip tıklamayı engellemesin */
-    position: absolute;
-    z-index: 9999;
-}
-/* 🔍 Autocomplete kutusu */
-.suggestions-list {
-    position: absolute;
-    top: calc(100% + 4px);
-    left: 0;
-    width: 100%;
-    max-height: 200px;
-    background: rgba(255, 255, 255, 0.96);
-    backdrop-filter: blur(6px);
-    border-radius: 12px;
-    border: 1px solid #ccc;
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
-    overflow-y: auto;
-    display: none;
-    z-index: 10001;
-    animation: fadeIn 0.15s ease-in-out;
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: scale(0.98);
-    }
-
-    to {
-        opacity: 1;
-        transform: scale(1);
-    }
-}
-
-.suggestion-item {
-    padding: 10px 14px;
-    cursor: pointer;
-    font-size: 14px;
-    transition: background-color 0.2s ease;
-    border-bottom: 1px solid #eee;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-    .suggestion-item:last-child {
-        border-bottom: none;
-    }
-
-    .suggestion-item:hover {
-        background-color: #f0f6ff;
-    }
-
-/* 🔖 Seçilen katılımcılar */
-.selected-tags {
-    margin-top: 8px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-}
-
 .tag {
-    background: #0078d4;
-    color: white;
-    padding: 6px 12px;
-    border-radius: 20px;
+    background-color: #e5e5e5;
+    color: #333;
+    padding: 4px 8px;
+    margin: 4px;
+    border-radius: 6px;
+    display: inline-block;
     font-size: 13px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
+    font-weight: 500;
 }
 
     .tag button {
         background: transparent;
         border: none;
-        color: white;
-        font-weight: bold;
+        margin-left: 6px;
+        color: #900;
         cursor: pointer;
-        font-size: 16px;
-        line-height: 1;
     }
 
-.month-label.first {
-    font-size: 0.7rem;
-    font-weight: bold;
-    color: #888;
-    display: block;
-    margin-bottom: 4px;
-}
-.fc-daygrid-day-frame {
-    min-height: 100px;
-    height: 100px;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    overflow: hidden;
-    padding: 4px;
-    box-sizing: border-box;
-}
-
-.fc-daygrid-day-number {
-    z-index: 1;
+.suggestion-list {
+    border: 1px solid #ccc;
+    max-height: 150px;
+    overflow-y: auto;
+    background: white;
     position: relative;
-    font-size: 14px;
-    color: #111;
+    z-index: 1000;
+    margin-top: 4px;
+    border-radius: 6px;
+    font-size: 13px;
 }
 
-.fc-daygrid-day {
-    min-width: 1px; /* Taşmaları engelle */
-    box-sizing: border-box;
+.suggestion-item {
+    padding: 8px;
+    cursor: pointer;
 }
 
-.fc-daygrid-body {
-    width: 100%;
-    overflow: hidden;
-}
-
-.fc .month-label {
-    background: rgba(185, 28, 28, 0.08); /* Hafif kırmızı arka plan */
-    color: rgba(185, 28, 28, 0.75); /* Daha belirgin ama yumuşak kırmızı yazı */
-    font-weight: 600;
-    font-size: 10px;
-    padding: 2px 8px;
-    border-radius: 12px;
-    display: inline-block;
-    margin-bottom: 3px;
-    border: none;
-    box-shadow: none;
-    text-transform: uppercase;
-    letter-spacing: 0.3px;
-}
-
-.month-label {
-    display: inline-block;
-    font-size: 11px;
-    font-weight: 600;
-    padding: 4px 10px;
-    background-color: rgba(255, 0, 0, 0.08); /* 🔴 Tatlı kırmızı zemin */
-    color: #d10000; /* 🔴 Belirgin kırmızı yazı */
-    border-radius: 12px;
-    margin-bottom: 4px;
-    margin-left: 2px;
-    pointer-events: none;
-    user-select: none;
-    font-family: 'Segoe UI', sans-serif;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    transition: all 0.2s ease;
-}
-.fc .fc-daygrid-day .month-label {
-    background-color: rgba(255, 0, 0, 0.1) !important;
-    color: #cc0000 !important;
-    font-weight: bold !important;
-    padding: 4px 8px !important;
-    font-size: 10px !important;
-    border-radius: 10px !important;
-    text-transform: uppercase;
-}
+    .suggestion-item:hover {
+        background-color: #f0f0f0;
+    }
