@@ -108,31 +108,39 @@ html, body {
 }
 
 .fc-event {
-    background-color: #cc0000 !important;
-    color: white !important;
-    border: none;
-    padding: 6px 8px;
-    border-radius: 8px;
-    font-weight: bold;
-    font-size: 14px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-    white-space: normal;
+    background-color: #ffe5e5 !important; /* Açık kırmızı */
+    color: #222 !important;
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 13px;
+    line-height: 1.4;
+    border-radius: 4px;
+    border-left: 4px solid #d10000; /* Sol kırmızı şerit */
+    padding: 4px 6px;
+    white-space: normal !important;
+    overflow-wrap: break-word;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+    transition: background 0.2s ease;
 }
 
     .fc-event:hover {
-        background-color: #a80000 !important;
+        background-color: #ffd6d6 !important;
         cursor: pointer;
     }
+
+        .fc-event:hover .fc-event-title,
+        .fc-event:hover div {
+            color: #d10000 !important;
+        }
 
 /* === AYLAR ETİKET === */
 .month-label {
     display: inline-block;
     font-size: 11px;
-    font-weight: 600;
-    padding: 4px 10px;
-    background-color: rgba(255, 0, 0, 0.08);
-    color: #d10000;
-    border-radius: 12px;
+    font-weight: bold;
+    padding: 2px 8px;
+    background-color: rgba(255, 0, 0, 0.1);
+    color: #b91c1c;
+    border-radius: 8px;
     margin-bottom: 4px;
     margin-left: 2px;
     pointer-events: none;
@@ -140,51 +148,51 @@ html, body {
     font-family: 'Segoe UI', sans-serif;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    display: inline-block;
 }
 
-/* === TOOLTIP === */
 .modern-tooltip {
     position: absolute;
-    z-index: 9999;
-    pointer-events: none;
-    max-width: 400px;
+    background: #fff;
+    border: 2px solid #d10000;
+    border-radius: 14px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
     width: 380px;
-    background: #fff0f0;
-    border: 1px solid #ffcccc;
-    border-radius: 16px;
-    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
+    max-width: 90vw;
     font-family: 'Segoe UI', sans-serif;
     font-size: 14px;
-    animation: fadeIn 0.25s ease-out;
+    z-index: 9999;
     overflow: hidden;
-    padding: 0;
 }
 
 .tooltip-card {
-    padding: 0;
-    display: flex;
-    flex-direction: column;
+    border-radius: 12px;
 }
 
 .tooltip-title {
-    background-color: #d60000;
+    background: #d10000;
     color: white;
+    padding: 14px 18px;
     font-weight: bold;
-    padding: 12px 16px;
     font-size: 16px;
 }
 
 .tooltip-row {
-    padding: 10px 16px;
-    border-top: 1px solid #f5cfcf;
-    color: #333;
+    padding: 10px 18px;
+    border-bottom: 1px solid #eee;
 }
 
-    .tooltip-row b {
-        display: inline-block;
-        min-width: 100px;
-        color: #000;
+    .tooltip-row:last-child {
+        border-bottom: none;
     }
+
+    .tooltip-row span.label {
+        font-weight: 600;
+        display: inline-block;
+        width: 100px;
+        color: #444;
+    }
+
 .modal-floating {
     position: absolute;
     z-index: 1000;
@@ -244,6 +252,7 @@ html, body {
             border-color: #cc0000;
             outline: none;
         }
+
 
 /* Katılımcı seçimi özel alan */
 #katilimciContainer {
@@ -337,3 +346,36 @@ html, body {
     .suggestion-item:hover {
         background-color: #f0f0f0;
     }
+/* Etkinlik kutularını düzgün hizala */
+.fc-daygrid-event {
+    display: block !important;
+    border-radius: 8px;
+    background-color: #b91c1c !important;
+    color: white !important;
+    padding: 2px 6px;
+    font-size: 13px;
+    line-height: 1.4;
+    margin: 2px 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Fazla etkinlik varsa gösterilecek "+x daha" linki */
+.fc-daygrid-more-link {
+    font-size: 12px;
+    color: #4b5563;
+    margin-top: 2px;
+    display: block;
+}
+
+/* Tüm slotlara sabit yükseklik ver */
+.fc-daygrid-day-frame {
+    min-height: 120px;
+    max-height: 120px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+

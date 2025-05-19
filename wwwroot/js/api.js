@@ -27,7 +27,6 @@ async function fetchMeetingsFromApi(fetchInfo, successCallback, failureCallback)
             failureCallback("Veri dizi değil");
             return;
         }
-
         const events = data.map(m => ({
             id: m.id,
             title: `${m.title} - ${m.roomName}`,

@@ -10,6 +10,8 @@
         nowIndicator: true,
         timeZone: 'local',
         fixedWeekCount: true, // 6 haftayı sabit göster
+        dayMaxEventRows: true,  // 👈 bu satırı kullan
+        eventDisplay: 'block',
 
         headerToolbar: {
             left: 'prev,next today',

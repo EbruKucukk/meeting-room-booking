@@ -25,6 +25,102 @@
       "PackagePath": "staticwebassets\\favicon.ico"
     },
     {
+      "Id": "D:\\bookingWeb\\bookingWEB\\wwwroot\\icons\\anasayfa-icon.png",
+      "PackagePath": "staticwebassets\\icons\\anasayfa-icon.png"
+    },
+    {
+      "Id": "D:\\bookingWeb\\bookingWEB\\wwwroot\\icons\\april.png",
+      "PackagePath": "staticwebassets\\icons\\april.png"
+    },
+    {
+      "Id": "D:\\bookingWeb\\bookingWEB\\wwwroot\\icons\\august.png",
+      "PackagePath": "staticwebassets\\icons\\august.png"
+    },
+    {
+      "Id": "D:\\bookingWeb\\bookingWEB\\wwwroot\\icons\\background.png",
+      "PackagePath": "staticwebassets\\icons\\background.png"
+    },
+    {
+      "Id": "D:\\bookingWeb\\bookingWEB\\wwwroot\\icons\\calendar-day.png",
+      "PackagePath": "staticwebassets\\icons\\calendar-day.png"
+    },
+    {
+      "Id": "D:\\bookingWeb\\bookingWEB\\wwwroot\\icons\\clock.png",
+      "PackagePath": "staticwebassets\\icons\\clock.png"
+    },
+    {
+      "Id": "D:\\bookingWeb\\bookingWEB\\wwwroot\\icons\\december.png",
+      "PackagePath": "staticwebassets\\icons\\december.png"
+    },
+    {
+      "Id": "D:\\bookingWeb\\bookingWEB\\wwwroot\\icons\\email.png",
+      "PackagePath": "staticwebassets\\icons\\email.png"
+    },
+    {
+      "Id": "D:\\bookingWeb\\bookingWEB\\wwwroot\\icons\\february.png",
+      "PackagePath": "staticwebassets\\icons\\february.png"
+    },
+    {
+      "Id": "D:\\bookingWeb\\bookingWEB\\wwwroot\\icons\\folder-icon.png",
+      "PackagePath": "staticwebassets\\icons\\folder-icon.png"
+    },
+    {
+      "Id": "D:\\bookingWeb\\bookingWEB\\wwwroot\\icons\\january.png",
+      "PackagePath": "staticwebassets\\icons\\january.png"
+    },
+    {
+      "Id": "D:\\bookingWeb\\bookingWEB\\wwwroot\\icons\\july.png",
+      "PackagePath": "staticwebassets\\icons\\july.png"
+    },
+    {
+      "Id": "D:\\bookingWeb\\bookingWEB\\wwwroot\\icons\\june.png",
+      "PackagePath": "staticwebassets\\icons\\june.png"
+    },
+    {
+      "Id": "D:\\bookingWeb\\bookingWEB\\wwwroot\\icons\\log-in.png",
+      "PackagePath": "staticwebassets\\icons\\log-in.png"
+    },
+    {
+      "Id": "D:\\bookingWeb\\bookingWEB\\wwwroot\\icons\\login.png",
+      "PackagePath": "staticwebassets\\icons\\login.png"
+    },
+    {
+      "Id": "D:\\bookingWeb\\bookingWEB\\wwwroot\\icons\\march.png",
+      "PackagePath": "staticwebassets\\icons\\march.png"
+    },
+    {
+      "Id": "D:\\bookingWeb\\bookingWEB\\wwwroot\\icons\\may.png",
+      "PackagePath": "staticwebassets\\icons\\may.png"
+    },
+    {
+      "Id": "D:\\bookingWeb\\bookingWEB\\wwwroot\\icons\\meeting-icon.png",
+      "PackagePath": "staticwebassets\\icons\\meeting-icon.png"
+    },
+    {
+      "Id": "D:\\bookingWeb\\bookingWEB\\wwwroot\\icons\\meeting-table.png",
+      "PackagePath": "staticwebassets\\icons\\meeting-table.png"
+    },
+    {
+      "Id": "D:\\bookingWeb\\bookingWEB\\wwwroot\\icons\\november.png",
+      "PackagePath": "staticwebassets\\icons\\november.png"
+    },
+    {
+      "Id": "D:\\bookingWeb\\bookingWEB\\wwwroot\\icons\\october.png",
+      "PackagePath": "staticwebassets\\icons\\october.png"
+    },
+    {
+      "Id": "D:\\bookingWeb\\bookingWEB\\wwwroot\\icons\\open-lock.png",
+      "PackagePath": "staticwebassets\\icons\\open-lock.png"
+    },
+    {
+      "Id": "D:\\bookingWeb\\bookingWEB\\wwwroot\\icons\\password-icon.png",
+      "PackagePath": "staticwebassets\\icons\\password-icon.png"
+    },
+    {
+      "Id": "D:\\bookingWeb\\bookingWEB\\wwwroot\\icons\\september.png",
+      "PackagePath": "staticwebassets\\icons\\september.png"
+    },
+    {
       "Id": "D:\\bookingWeb\\bookingWEB\\wwwroot\\images\\siber-logo.PNG",
       "PackagePath": "staticwebassets\\images\\siber-logo.PNG"
     },
