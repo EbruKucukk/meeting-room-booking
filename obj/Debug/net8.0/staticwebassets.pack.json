@@ -53,6 +53,10 @@
       "PackagePath": "staticwebassets\\icons\\december.png"
     },
     {
+      "Id": "D:\\bookingWeb\\bookingWEB\\wwwroot\\icons\\desc.png",
+      "PackagePath": "staticwebassets\\icons\\desc.png"
+    },
+    {
       "Id": "D:\\bookingWeb\\bookingWEB\\wwwroot\\icons\\email.png",
       "PackagePath": "staticwebassets\\icons\\email.png"
     },
@@ -75,6 +79,10 @@
     {
       "Id": "D:\\bookingWeb\\bookingWEB\\wwwroot\\icons\\june.png",
       "PackagePath": "staticwebassets\\icons\\june.png"
+    },
+    {
+      "Id": "D:\\bookingWeb\\bookingWEB\\wwwroot\\icons\\katilimci.png",
+      "PackagePath": "staticwebassets\\icons\\katilimci.png"
     },
     {
       "Id": "D:\\bookingWeb\\bookingWEB\\wwwroot\\icons\\log-in.png",
@@ -101,6 +109,10 @@
       "PackagePath": "staticwebassets\\icons\\meeting-table.png"
     },
     {
+      "Id": "D:\\bookingWeb\\bookingWEB\\wwwroot\\icons\\meeting-table2.png",
+      "PackagePath": "staticwebassets\\icons\\meeting-table2.png"
+    },
+    {
       "Id": "D:\\bookingWeb\\bookingWEB\\wwwroot\\icons\\november.png",
       "PackagePath": "staticwebassets\\icons\\november.png"
     },
@@ -119,6 +131,14 @@
     {
       "Id": "D:\\bookingWeb\\bookingWEB\\wwwroot\\icons\\september.png",
       "PackagePath": "staticwebassets\\icons\\september.png"
+    },
+    {
+      "Id": "D:\\bookingWeb\\bookingWEB\\wwwroot\\icons\\subject.png",
+      "PackagePath": "staticwebassets\\icons\\subject.png"
+    },
+    {
+      "Id": "D:\\bookingWeb\\bookingWEB\\wwwroot\\icons\\teamwork.png",
+      "PackagePath": "staticwebassets\\icons\\teamwork.png"
     },
     {
       "Id": "D:\\bookingWeb\\bookingWEB\\wwwroot\\images\\siber-logo.PNG",

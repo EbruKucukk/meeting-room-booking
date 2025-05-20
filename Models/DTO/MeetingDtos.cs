@@ -10,7 +10,7 @@ namespace bookingWEB.Models.DTOs
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
         public string Description { get; set; }
-        public List<string> Participants { get; set; }
+        public List<string>? Participants { get; set; } = new();
     }
 
 

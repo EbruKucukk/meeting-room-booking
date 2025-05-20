@@ -81,7 +81,13 @@ namespace bookingWEB.Controllers
         [HttpGet]
         public async Task<IActionResult> GetMeetings()
         {
+            var userEmail = HttpContext.Session.GetString("UserEmail");
+            if (string.IsNullOrEmpty(userEmail))
+                return Unauthorized();
+
+            // 🔁 Hiçbir filtre yapmadan tüm verileri getir
             var meetings = await _context.Meetings.ToListAsync();
+
             return Ok(meetings);
         }
     }

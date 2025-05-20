@@ -279,19 +279,18 @@
       if (target !== transitionElement) {
         return;
       }
+        setTimeout(() => {
+            const handleClickOutside = (event) => {
+                const modalElement = document.querySelector('.modal-floating');
+                if (modalElement && !modalElement.contains(event.target)) {
+                    modalElement.remove();
+                    document.removeEventListener('mousedown', handleClickOutside);
+                }
+            };
 
-      called = true;
-      transitionElement.removeEventListener(TRANSITION_END, handler);
-      execute(callback);
-    };
+            document.addEventListener('mousedown', handleClickOutside);
+        }, 0);
 
-    transitionElement.addEventListener(TRANSITION_END, handler);
-    setTimeout(() => {
-      if (!called) {
-        triggerTransitionEnd(transitionElement);
-      }
-    }, emulatedDuration);
-  };
   /**
    * Return the previous/next element of a list.
    *

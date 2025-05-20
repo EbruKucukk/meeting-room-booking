@@ -13,6 +13,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/locales/tr.global.min.js"></script>
+
+    <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="-1" />
 </head>
 <body>
     <div class="dashboard-container">
@@ -24,10 +28,18 @@
             </div>
 
             <nav class="nav-links">
-                <a href="#" class="nav-link active">Takvim</a>
-                <a href="#" class="nav-link">Odalar</a>
-                <a href="#" class="nav-link">Kişiler</a>
-                <a href="/Logout" class="nav-link">Çıkış</a>
+                <a href="#" class="nav-link active">
+                    <img src="/icons/calendar-day.png" class="nav-icon" alt=""> Takvim
+                </a>
+                <a href="#" class="nav-link">
+                    <img src="/icons/meeting-table.png" class="nav-icon" alt=""> Odalar
+                </a>
+                <a href="#" class="nav-link" id="kisilerLink">
+                    <img src="/icons/login.png" class="nav-icon" id="kisilerIcon" alt=""> Kişiler
+                </a>
+                <a href="/Logout" class="nav-link">
+                    <img src="/icons/log-in.png" class="nav-icon" alt=""> Çıkış
+                </a>
             </nav>
 
             <div class="user-profile">
@@ -45,22 +57,36 @@
             <div class="calendar-placeholder" id="calendarView">
                 <!-- JS ile FullCalendar buraya yerleşecek -->
             </div>
-
-            <!-- Razor Partial: Autocomplete Katılımcılar Alanı -->
-            <div id="autocompleteContainer">
-                @await Html.PartialAsync("_AutocompleteInput")
-            </div>
         </main>
     </div>
 
+    <script>
+        // JS tarafı için e-posta adresini atıyoruz
+        window.loggedInUser = "@Model.CurrentUserEmail";
+
+        document.getElementById("kisilerLink").addEventListener("click", function (e) {
+            e.preventDefault();
+
+            // Diğer nav-link'lerden active class'ı kaldır
+            document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+
+            // Bu linke active class'ı ekle
+            this.classList.add('active');
+
+            // İkonu aktif ikonla değiştir
+            const icon = document.getElementById("kisilerIcon");
+            icon.src = "/icons/teamwork.png";
+
+            openUserSearchModal(e);
+        });
+    </script>
+    <script>
+        window.loggedInUser = "@Model.CurrentUserEmail"; // ❗️AdSoyad değil, e-posta lazım!
+    </script>
+
     <script src="/js/api.js"></script>
-    @await Html.PartialAsync("_AutocompleteInput") <!-- 👈 Bunu ekle -->
     <script src="/js/modal.js"></script>
     <script src="/js/calendar.js"></script>
-
-    <script>
-        window.loggedInUser = "@Model.CurrentUser"; // Veya @User.Identity.Name
-    </script>
 
 </body>
 </html>

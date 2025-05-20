@@ -1,38 +1,45 @@
 using bookingWEB.Data;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Authorization;
 using System.Linq;
 
-[Authorize]
-public class BookingDashboardModel : PageModel
+namespace bookingWEB.Pages
 {
-    private readonly AppDbContext _context;
-
-    public BookingDashboardModel(AppDbContext context)
+    public class BookingDashboardModel : PageModel
     {
-        _context = context;
-    }
+        private readonly AppDbContext _context;
 
-    public string CurrentUser { get; set; } = "Misafir";
-
-    public void OnGet()
-    {
-        var userId = HttpContext.Session.GetInt32("UserId");
-
-        if (userId != null)
+        public BookingDashboardModel(AppDbContext context)
         {
-            var user = _context.Kullanici.FirstOrDefault(u => u.KullaniciId == userId);
-            if (user != null)
-            {
-                CurrentUser = user.AdSoyad;
-                return;
-            }
+            _context = context;
         }
 
-        // Yedek: Eğer session’da kullanıcı yoksa Claims’ten dene
-        if (User.Identity.IsAuthenticated)
+        public string CurrentUser { get; set; } = "Misafir";         // Ad Soyad
+        public string CurrentUserEmail { get; set; } = "";           // E-posta
+
+        public IActionResult OnGet()
         {
-            CurrentUser = User.Identity.Name ?? "Misafir";
+            Response.Headers["Cache-Control"] = "no-store, no-cache, must-revalidate";
+            Response.Headers["Pragma"] = "no-cache";
+            Response.Headers["Expires"] = "-1";
+
+            var userEmail = HttpContext.Session.GetString("UserEmail");
+
+            if (string.IsNullOrEmpty(userEmail))
+            {
+                return RedirectToPage("/Login");
+            }
+
+            var user = _context.Kullanici.FirstOrDefault(u => u.Email == userEmail);
+            if (user == null)
+            {
+                return RedirectToPage("/Login");
+            }
+
+            CurrentUser = user.AdSoyad;
+            CurrentUserEmail = user.Email;
+
+            return Page();
         }
     }
 }

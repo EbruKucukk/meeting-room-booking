@@ -1,4 +1,34 @@
-﻿document.addEventListener('DOMContentLoaded', async function () {
+﻿let selectedUsers = []; // Modalda seçilen kullanıcıların e-posta listesi
+window.selectedUsers = window.selectedUsers || [];
+
+const userColors = {};
+
+function getUserColor(email) {
+    const normalizedEmail = (email || "").toLowerCase();
+    const loggedInEmail = (window.loggedInUser || "").toLowerCase();
+
+    if (normalizedEmail === loggedInEmail) {
+        return '#d10000'; // 🔴 Giriş yapan kullanıcıya sabit kırmızı
+    }
+
+    if (!userColors[normalizedEmail]) {
+        userColors[normalizedEmail] = getRandomColor();
+    }
+    return userColors[normalizedEmail];
+}
+
+function getRandomColor() {
+    const colors = [
+        '#3cb44b', '#ffe119', '#4363d8',
+        '#f58231', '#911eb4', '#46f0f0', '#f032e6',
+        '#bcf60c', '#fabebe', '#008080', '#e6beff',
+        '#9a6324', '#fffac8', '#800000', '#aaffc3',
+        '#808000', '#ffd8b1', '#000075', '#808080'
+    ];
+    return colors[Math.floor(Math.random() * colors.length)];
+}
+
+document.addEventListener('DOMContentLoaded', async function () {
     const calendarEl = document.getElementById('calendarView');
 
     const calendar = new FullCalendar.Calendar(calendarEl, {

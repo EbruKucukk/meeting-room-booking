@@ -27,17 +27,42 @@ async function fetchMeetingsFromApi(fetchInfo, successCallback, failureCallback)
             failureCallback("Veri dizi değil");
             return;
         }
-        const events = data.map(m => ({
-            id: m.id,
-            title: `${m.title} - ${m.roomName}`,
-            start: m.startTime,
-            end: m.endTime,
-            extendedProps: {
-                organizer: m.organizer,
-                roomName: m.roomName,
-                description: m.description
-            }
-        }));
+
+        // ✅ E-posta tabanlı organizatör kontrolü
+        const currentUser = (window.loggedInUser || "").toLowerCase();
+        const selected = (window.selectedUsers || []).map(e => e.toLowerCase());
+        const allUsers = [currentUser, ...selected];
+
+        console.log("🔎 Karşılaştırma için e-posta listesi:", allUsers);
+
+        const filtered = data.filter(m => {
+            const org = (m.organizer || "").toLowerCase();
+            const participantStr = (m.participants || "").toLowerCase();
+            return allUsers.some(email =>
+                org === email || participantStr.includes(email)
+            );
+        });
+
+        const events = filtered.map(m => {
+            const bgColor = getUserColor(m.organizer);
+
+            return {
+                id: m.id,
+                title: `${m.title} - ${m.roomName}`,
+                start: m.startTime,
+                end: m.endTime,
+                backgroundColor: bgColor,
+                borderColor: bgColor,
+                textColor: '#fff',
+                extendedProps: {
+                    organizer: m.organizer,
+                    roomName: m.roomName,
+                    description: m.description
+                }
+            };
+        });
+
+        console.log("📅 Takvime gönderilen toplantılar:", events);
 
         successCallback(events);
 

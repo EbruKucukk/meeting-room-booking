@@ -47,7 +47,7 @@ namespace bookingWEB.Pages
                 return Page();
             }
 
-            // ✅ Kullanıcı kimliği oluşturuluyor
+            // ✅ Kimlik oluştur
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Name, user.AdSoyad),
@@ -57,14 +57,14 @@ namespace bookingWEB.Pages
             var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
             var principal = new ClaimsPrincipal(identity);
 
-            // ✅ Kimlik cookie olarak yazılıyor
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
 
-            // ✅ Email'i Session'a yaz
+            // ✅ Session'a kullanıcı bilgilerini yaz
             HttpContext.Session.SetString("UserEmail", user.Email);
+            HttpContext.Session.SetInt32("UserId", user.KullaniciId); // ❗ Eksik olan buydu
 
-            // 🧭 Giriş başarılı, yönlendir
-            return Redirect(returnUrl ?? "/BookingDashboard");
+            // ✅ Dashboard’a yönlendir
+            return RedirectToPage("/BookingDashboard");
         }
 
         private string HashPassword(string password)

@@ -18,6 +18,7 @@ html, body {
 
 /* === SIDEBAR === */
 .sidebar {
+    position: relative; /* ✅ Bunu ekliyoruz */
     width: 280px;
     background-color: #FF0000;
     color: white;
@@ -26,6 +27,7 @@ html, body {
     justify-content: space-between;
     padding: 40px 24px;
 }
+
 
 .logo h2 {
     font-family: 'Orbitron', sans-serif;
@@ -108,20 +110,17 @@ html, body {
 }
 
 .fc-event {
-    background-color: #ffe5e5 !important; /* Açık kırmızı */
-    color: #222 !important;
+    color: #222;
     font-family: 'Segoe UI', sans-serif;
     font-size: 13px;
     line-height: 1.4;
     border-radius: 4px;
-    border-left: 4px solid #d10000; /* Sol kırmızı şerit */
     padding: 4px 6px;
     white-space: normal !important;
     overflow-wrap: break-word;
     box-shadow: 0 1px 2px rgba(0,0,0,0.08);
     transition: background 0.2s ease;
 }
-
     .fc-event:hover {
         background-color: #ffd6d6 !important;
         cursor: pointer;
@@ -348,10 +347,7 @@ html, body {
     }
 /* Etkinlik kutularını düzgün hizala */
 .fc-daygrid-event {
-    display: block !important;
     border-radius: 8px;
-    background-color: #b91c1c !important;
-    color: white !important;
     padding: 2px 6px;
     font-size: 13px;
     line-height: 1.4;
@@ -378,4 +374,227 @@ html, body {
     flex-direction: column;
     justify-content: flex-start;
 }
+.nav-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+    text-decoration: none;
+    padding: 12px;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+    gap: 20px;
+}
 
+    .nav-link:hover,
+    .nav-link.active {
+        background-color: rgba(255, 255, 255, 0.2);
+    }
+
+.nav-icon {
+    width: 24px;
+    height: 24px;
+    filter: brightness(0) invert(1);
+    transition: transform 0.2s ease;
+}
+
+.nav-link:hover .nav-icon {
+    transform: scale(2.15);
+}
+
+.sidebar::before {
+    content: "";
+    position: absolute;
+    top: 40px;
+    left: 10px;
+    width: 180px;
+    height: 180px;
+    background-image: url('/icons/calendar-day.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    opacity: 0.03;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.sidebar::after {
+    content: "";
+    position: absolute;
+    bottom: 20px;
+    left: 0;
+    width: 100%;
+    height: 100px;
+    background-image: url('/icons/meeting-table.png');
+    background-size: contain;
+    background-position: bottom center;
+    background-repeat: no-repeat;
+    opacity: 0.15;
+    z-index: 0;
+    pointer-events: none;
+}
+.nav-link.active .nav-icon {
+    filter: brightness(1.2) drop-shadow(0 0 2px #fff);
+}
+@media (max-width: 768px) {
+    .sidebar {
+        width: 80px;
+        padding: 20px 10px;
+        align-items: center;
+    }
+
+    .nav-link {
+        flex-direction: column;
+        font-size: 12px;
+        gap: 4px;
+        text-align: center;
+    }
+
+    .nav-icon {
+        width: 24px;
+        height: 24px;
+    }
+}
+.modal-floating label::before {
+    content: "";
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    margin-right: 8px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    vertical-align: middle;
+}
+
+.modal-content {
+    font-family: 'Segoe UI', sans-serif;
+}
+
+    .modal-content input[type="text"] {
+        width: 100%;
+        padding: 10px 12px;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        outline: none;
+        font-size: 14px;
+        box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+        transition: border 0.2s, box-shadow 0.2s;
+    }
+
+        .modal-content input[type="text"]:focus {
+            border-color: #d10000;
+            box-shadow: 0 0 0 2px rgba(209, 0, 0, 0.2);
+        }
+
+.suggestion-list {
+    max-height: 160px; /* maksimum 5-6 satır kadar */
+    overflow-y: auto;
+    overflow-x: hidden;
+    margin-top: 6px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background: white;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    z-index: 1000;
+    position: relative;
+}
+
+
+.suggestion-item {
+    padding: 8px 12px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+    .suggestion-item:hover {
+        background: #fce6e6;
+        color: #d10000;
+        font-weight: 500;
+    }
+.suggestion-list::-webkit-scrollbar {
+    width: 0px;
+    background: transparent; /* Firefox */
+}
+
+#selectedParticipants {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 8px;
+}
+
+.tag {
+    background: #d10000;
+    color: white;
+    border-radius: 12px;
+    padding: 4px 8px;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+    .tag button {
+        background: none;
+        border: none;
+        color: white;
+        font-weight: bold;
+        cursor: pointer;
+    }
+label[for="title"]::before {
+    content: "";
+    display: inline-block;
+    background-image: url('/icons/subject.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    width: 18px;
+    height: 18px;
+    margin-right: 6px;
+    vertical-align: middle;
+}
+
+label[for="roomName"]::before {
+    content: "";
+    background-image: url('/icons/meeting-table.png');
+    width: 18px;
+    height: 18px;
+    margin-right: 6px;
+    display: inline-block;
+    vertical-align: middle;
+    background-size: contain;
+}
+
+label[for="selectedTime"]::before,
+label[for="endTime"]::before {
+    content: "";
+    background-image: url('/icons/clock.png');
+    width: 18px;
+    height: 18px;
+    margin-right: 6px;
+    display: inline-block;
+    vertical-align: middle;
+    background-size: contain;
+}
+
+label[for="participantInput"]::before {
+    content: "";
+    background-image: url('/icons/katilimci.png');
+    width: 18px;
+    height: 18px;
+    margin-right: 6px;
+    display: inline-block;
+    vertical-align: middle;
+    background-size: contain;
+}
+
+label[for="description"]::before {
+    content: "";
+    background-image: url('/icons/desc.png');
+    width: 18px;
+    height: 18px;
+    margin-right: 6px;
+    display: inline-block;
+    vertical-align: middle;
+    background-size: contain;
+}
